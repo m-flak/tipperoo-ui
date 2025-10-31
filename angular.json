@@ -28,6 +28,9 @@
             ],
             "styles": [
               "src/styles.scss"
+            ],
+            "polyfills": [
+              "src/polyfills.ts"
             ]
           },
           "configurations": {
@@ -84,6 +87,9 @@
             ],
             "styles": [
               "src/styles.scss"
+            ],
+            "polyfills": [
+              "src/polyfills.ts"
             ]
           }
         }

@@ -5,12 +5,14 @@ export interface WalletState {
     connected: boolean;
     chainId: string;
     accounts: string[];
+    nftId: number;
 }
 
 export const walletState: WalletState = {
     connected: false,
     chainId: '0x0',
-    accounts: []
+    accounts: [],
+    nftId: 0
 }
 
 export const walletReducer = createReducer(
@@ -25,7 +27,16 @@ export const walletReducer = createReducer(
         ...state,
         connected: false,
         chainId: '0x0',
-        accounts: []
+        accounts: [],
+        nftId: 0
+    })),
+    on(WalletActions.changeChain, WalletActions.changeChainSuccess, (state, {chainId}) => ({
+        ...state,
+        chainId: chainId
+    })),
+    on(WalletActions.setAccountNft, (state, { nftId }) => ({
+        ...state,
+        nftId
     }))
 );
 

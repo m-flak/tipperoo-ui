@@ -4,6 +4,8 @@ import { selectAccounts, selectChainId, selectIsConnected } from '../../store/wa
 import { AsyncPipe } from '@angular/common';
 import { WalletActions } from '../../store/wallet.actions';
 import { ChainIcon } from '../chain-icon/chain-icon';
+import { firstValueFrom } from 'rxjs';
+import { WalletFacade } from '../../store/wallet.facade';
 
 @Component({
   selector: 'app-connect-wallet',
@@ -12,23 +14,23 @@ import { ChainIcon } from '../chain-icon/chain-icon';
   styleUrl: './connect-wallet.scss',
 })
 export class ConnectWallet {
-  private _store = inject(Store);
+  private _facade = inject(WalletFacade);
   
-  connected$ = this._store.select(selectIsConnected);
-  accounts$ = this._store.select(selectAccounts);
-  chainId$ = this._store.select(selectChainId);
+  connected$ = this._facade.getIsConnected();
+  accounts$ = this._facade.getAccounts();
+  chainId$ = this._facade.getChainId();
 
   constructor() {}
   
-  connect() {
-    this._store.dispatch(WalletActions.connect());
+  async connect() {
+    await this._facade.connectWallet();
   }
 
   disconnect() {
-    this._store.dispatch(WalletActions.disconnect());
+    this._facade.disconnectWallet();
   }
 
-  switchNetwork() {
-    console.log('switch network');
+  async switchNetwork() {
+    await this._facade.switchNetwork();
   }
 }

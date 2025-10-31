@@ -32,6 +32,8 @@
     "@ngrx/effects": "^20.1.0",
     "@ngrx/store": "^20.1.0",
     "@ngrx/store-devtools": "^20.1.0",
+    "buffer": "^6.0.3",
+    "keccak256": "^1.0.6",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

@@ -5,6 +5,9 @@ export const WalletActions = createActionGroup({
     events: {
         'Connect': emptyProps(),
         'Connect Success': props<{accounts: string[], chainId: string}>(),
-        'Disconnect': emptyProps()
+        'Disconnect': emptyProps(),
+        'Change Chain': props<{chainId: string}>(),
+        'Change Chain Success': props<{chainId: string}>(),
+        'Set Account Nft': props<{nftId: number}>()
     }
 });

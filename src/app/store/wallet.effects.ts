@@ -4,7 +4,7 @@ import { createEffect, Actions, ofType } from "@ngrx/effects";
 import { WalletActions } from "./wallet.actions";
 import { MetaMaskService } from "../metamask/metamask.service";
 
-export const uponConnectDoConnect = createEffect(
+export const uponConnect = createEffect(
     (actions$ = inject(Actions), mm = inject(MetaMaskService)) => 
         actions$.pipe(
             ofType(WalletActions.connect),
@@ -17,11 +17,21 @@ export const uponConnectDoConnect = createEffect(
         { functional: true, dispatch: true}
 );
 
-export const uponDisconnectDoDisconnect = createEffect(
+export const uponDisconnect = createEffect(
     (actions$ = inject(Actions), mm = inject(MetaMaskService)) => 
         actions$.pipe(
             ofType(WalletActions.disconnect),
             switchMap(() => mm.disconnectWallet().pipe())
         ),
         { functional: true, dispatch: false }
+);
+
+export const uponChangeChain = createEffect(
+    (actions$ = inject(Actions), mm = inject(MetaMaskService)) => 
+        actions$.pipe(
+            ofType(WalletActions.changeChain),
+            switchMap(({chainId}) => mm.changeChain(chainId)),
+            map(chainId => WalletActions.changeChainSuccess({ chainId }))
+        ),
+        { functional: true, dispatch: true }
 );

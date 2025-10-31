@@ -1,0 +1,20 @@
+@let isConnected = connected$ | async;
+
+<div
+    class="connect-wallet-bar"
+>
+    @if (!isConnected) {
+        <button (click)="connect()">Connect Wallet</button>
+    }
+    @else {
+        @let accounts = accounts$ | async;
+        <select id="ConnectWalletBar_Accounts">
+            @for (account of accounts; track $index) {
+                <option [value]="account">{{ account }}</option>
+            }
+        </select>
+        @let chainId = chainId$ | async;
+        <app-chain-icon [chainId]="chainId!" (click)="switchNetwork()"></app-chain-icon>
+        <button (click)="disconnect()">Disconnect Wallet</button>
+    }
+</div>

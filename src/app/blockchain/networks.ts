@@ -1,12 +1,14 @@
+import { NetworkConstants } from "./networks.constants";
+
 export const getNetwork = (chainId: string) => {
     switch (chainId) {
-        case "0x82750":
+        case NetworkConstants.SCROLL:
             return NETWORKS.scroll;
-        case "0x8274F":
+        case NetworkConstants.SCROLL_SEPOLIA:
         default:
             return NETWORKS.scrollSepolia;
     }
-}
+};
 
 export const NETWORKS = {
     scroll: {
@@ -20,7 +22,8 @@ export const NETWORKS = {
         },
         blockExplorerUrls: ["https://scrollscan.com/"],
         contracts: {
-            nft: import.meta.env.NG_APP_NFT_CONTRACT
+            nft: import.meta.env.NG_APP_NFT_CONTRACT,
+            creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT
         }
     },
     scrollSepolia: {
@@ -34,7 +37,8 @@ export const NETWORKS = {
         },
         blockExplorerUrls: ["https://sepolia.scrollscan.com/"],
         contracts: {
-            nft: import.meta.env.NG_APP_NFT_CONTRACT_TESTNET
+            nft: import.meta.env.NG_APP_NFT_CONTRACT_TESTNET,
+            creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_TESTNET
         }
     }
 };

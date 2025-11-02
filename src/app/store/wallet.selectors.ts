@@ -18,3 +18,12 @@ export const selectChainId = createSelector(
     (state) => state.chainId
 );
 
+export const selectNftAccountId = createSelector(
+    selectWallet,
+    (state) => state.nftId
+);
+
+export const selectBalances = createSelector(
+    selectWallet,
+    (state) => ({ credits: state.balanceCredits, eth: state.balanceEth})
+);

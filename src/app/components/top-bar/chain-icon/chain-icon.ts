@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { NetworkConstants } from '../../../blockchain/networks.constants';
 
 @Component({
   selector: 'app-chain-icon',
@@ -7,6 +8,8 @@ import { Component, Input } from '@angular/core';
   styleUrl: './chain-icon.scss',
 })
 export class ChainIcon {
+  readonly chainIds = NetworkConstants;
+
   @Input()
   chainId = "0x0"
 }

@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@angular/core";
 import { METAMASK } from "./metamask.provider";
 import MetaMaskSDK, { SDKProvider } from "@metamask/sdk";
 import { catchError, filter, from, map, Observable, tap, throwError } from "rxjs";
-import { getNetwork } from "./networks";
+import { getNetwork } from "../blockchain/networks";
 import { fnAbi, hexStr } from "./metamask.utils";
 
 @Injectable({
@@ -12,6 +12,10 @@ export class MetaMaskService {
     private _ethereum: SDKProvider | undefined = undefined;
 
     constructor(@Inject(METAMASK) private _mm: MetaMaskSDK) {}
+
+    get connected() {
+        return this._ethereum !== undefined;
+    }
 
     getActiveAccount(prefix: boolean = true): string {
         let addr = this._ethereum?.getSelectedAddress();
@@ -79,6 +83,21 @@ export class MetaMaskService {
                 return throwError(() => new Error("Error changing chains!"));
             }),
             map(() => network.chainId)
+        );
+    }
+
+    getBalance(address: string): Observable<number> {
+        if (!this._ethereum) {
+            return throwError(() => new Error("No ethereum provider"));
+        }
+
+        return from(this._ethereum.request({
+            method: "eth_getBalance",
+            params: [address, "latest"]
+        })).pipe(
+            filter(n => n !== null),
+            map(n => BigInt(<string>n)),
+            map(big => Number(((big / 1n ** 18n)).toString()) / 1e18)
         );
     }
 

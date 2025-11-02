@@ -1,11 +1,11 @@
 import { Component, inject, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectAccounts, selectChainId, selectIsConnected } from '../../store/wallet.selectors';
+import { selectAccounts, selectChainId, selectIsConnected } from '../../../store/wallet.selectors';
 import { AsyncPipe } from '@angular/common';
-import { WalletActions } from '../../store/wallet.actions';
+import { WalletActions } from '../../../store/wallet.actions';
 import { ChainIcon } from '../chain-icon/chain-icon';
 import { firstValueFrom } from 'rxjs';
-import { WalletFacade } from '../../store/wallet.facade';
+import { WalletFacade } from '../../../store/wallet.facade';
 
 @Component({
   selector: 'app-connect-wallet',

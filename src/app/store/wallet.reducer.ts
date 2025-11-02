@@ -4,15 +4,23 @@ import { WalletActions } from "./wallet.actions";
 export interface WalletState {
     connected: boolean;
     chainId: string;
+    
     accounts: string[];
     nftId: number;
+
+    balanceCredits: number;
+    balanceEth: number;
 }
 
 export const walletState: WalletState = {
     connected: false,
     chainId: '0x0',
+    
     accounts: [],
-    nftId: 0
+    nftId: 0,
+
+    balanceCredits: 0,
+    balanceEth: 0
 }
 
 export const walletReducer = createReducer(
@@ -28,7 +36,9 @@ export const walletReducer = createReducer(
         connected: false,
         chainId: '0x0',
         accounts: [],
-        nftId: 0
+        nftId: 0,
+        balanceCredits: 0,
+        balanceEth: 0
     })),
     on(WalletActions.changeChain, WalletActions.changeChainSuccess, (state, {chainId}) => ({
         ...state,
@@ -37,6 +47,11 @@ export const walletReducer = createReducer(
     on(WalletActions.setAccountNft, (state, { nftId }) => ({
         ...state,
         nftId
+    })),
+    on(WalletActions.setBalances, (state, { credits, eth}) => ({
+        ...state,
+        balanceCredits: credits,
+        balanceEth: eth
     }))
 );
 

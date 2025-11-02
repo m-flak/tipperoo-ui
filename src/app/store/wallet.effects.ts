@@ -1,4 +1,4 @@
-import { map, switchMap } from "rxjs";
+import { filter, map, switchMap } from "rxjs";
 import { inject } from "@angular/core";
 import { createEffect, Actions, ofType } from "@ngrx/effects";
 import { WalletActions } from "./wallet.actions";
@@ -12,6 +12,7 @@ export const uponConnect = createEffect(
             switchMap(accounts => mm.getChainId().pipe(
                 map(chainId => ({accounts, chainId}))
             )),
+            filter(() => mm.connected),
             map(({accounts, chainId}) => WalletActions.connectSuccess({ accounts, chainId }))
         ),
         { functional: true, dispatch: true}

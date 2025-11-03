@@ -1,3 +1,4 @@
+import '@angular/localize/init';
 import { Buffer } from 'buffer';
 
 globalThis.Buffer = Buffer;

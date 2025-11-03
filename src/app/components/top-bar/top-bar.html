@@ -6,13 +6,17 @@
     @let hasAccount = hasAccount$ | async;
     @let accountId = accountId$ | async;
     @let balances = balances$ | async;
-    <app-asset-summary 
-        [hasAccount]="hasAccount ?? false"
-        [accountId]="accountId ?? 0"
-        [credits]="(balances ?? {credits:0,eth:0}).credits"
-        [eth]="(balances ?? {credits:0,eth:0}).eth"
-    >
-    </app-asset-summary>
+    @let connected = connected$  | async;
+
+    @if (connected === true) {
+        <app-asset-summary 
+            [hasAccount]="hasAccount ?? false"
+            [accountId]="accountId ?? 0"
+            [credits]="(balances ?? {credits:0,eth:0}).credits"
+            [eth]="(balances ?? {credits:0,eth:0}).eth"
+        >
+        </app-asset-summary>
+    }
 
     <app-connect-wallet></app-connect-wallet>
 </div>

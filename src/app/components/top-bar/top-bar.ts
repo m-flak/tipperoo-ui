@@ -14,6 +14,7 @@ import { AsyncPipe } from '@angular/common';
 export class TopBar {
   private _facade = inject(WalletFacade);
 
+  connected$ = this._facade.getIsConnected();
   accountId$ = this._facade.getNftAccountId();
   hasAccount$ = this.accountId$.pipe(map(id => id > 0));
   balances$ = this._facade.getBalances();

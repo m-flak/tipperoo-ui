@@ -6,10 +6,11 @@ import { WalletActions } from '../../../store/wallet.actions';
 import { ChainIcon } from '../chain-icon/chain-icon';
 import { firstValueFrom } from 'rxjs';
 import { WalletFacade } from '../../../store/wallet.facade';
+import { WalletAddressPipe } from './wallet-address.pipe';
 
 @Component({
   selector: 'app-connect-wallet',
-  imports: [AsyncPipe, ChainIcon],
+  imports: [AsyncPipe, ChainIcon, WalletAddressPipe],
   templateUrl: './connect-wallet.html',
   styleUrl: './connect-wallet.scss',
 })

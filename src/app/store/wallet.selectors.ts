@@ -27,3 +27,9 @@ export const selectBalances = createSelector(
     selectWallet,
     (state) => ({ credits: state.balanceCredits, eth: state.balanceEth})
 );
+
+export const selectChangeIsPending = (change: string) =>
+    createSelector(
+        selectWallet,
+        (state) => state.pendingChanges === change
+    );

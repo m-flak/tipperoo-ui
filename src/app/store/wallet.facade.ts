@@ -1,11 +1,12 @@
 import { inject, Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { MetaMaskService } from "../metamask/metamask.service";
-import { selectIsConnected, selectAccounts, selectChainId, selectNftAccountId, selectBalances } from "./wallet.selectors";
+import { selectIsConnected, selectAccounts, selectChainId, selectNftAccountId, selectBalances, selectChangeIsPending } from "./wallet.selectors";
 import { catchError, filter, firstValueFrom, Observable, of } from "rxjs";
 import { WalletActions } from "./wallet.actions";
 import { getNetwork } from "../blockchain/networks";
 import { NetworkConstants } from "../blockchain/networks.constants";
+import { ChangeConstants } from "./changes.constants";
 
 @Injectable({
     providedIn: 'root'
@@ -21,6 +22,7 @@ export class WalletFacade {
     getChainId = () => this._store.select(selectChainId);
     getNftAccountId = () => this._store.select(selectNftAccountId);
     getBalances = () => this._store.select(selectBalances);
+    getChangePending = (what: string) => this._store.select(selectChangeIsPending(what));
 
     async connectWallet() {
         this._store.dispatch(WalletActions.connect());
@@ -45,6 +47,32 @@ export class WalletFacade {
 
         await this._updateNftData();
         await this._updateBalances();
+    }
+
+    async createAccount() {
+        const chainId = await firstValueFrom(this.getChainId());
+        const txHash = await firstValueFrom(
+            this._mm.transact(
+                'mintAccountToken(address)',
+                [{
+                    arg: this._mm.getActiveAccount(false),
+                    encode: false
+                }],
+                getNetwork(chainId).contracts.nft,
+                this._mm.getActiveAccount()
+        ));
+
+        this._store.dispatch(WalletActions.changesPending({ what: ChangeConstants.NEW_ACCOUNT }));
+        
+        let sub = this._mm.receipt(txHash).subscribe(result => {
+            if (result !== undefined && result !== null) {
+                if (result.status === '0x1') {
+                    this._updateNftData()
+                        .then(() => this._store.dispatch(WalletActions.clearPendingChanges()))
+                        .then(() => sub.unsubscribe());
+                }
+            }
+        });
     }
 
     private async _updateBalances() {

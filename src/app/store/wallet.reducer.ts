@@ -2,6 +2,8 @@ import { createFeature, createReducer, on } from "@ngrx/store";
 import { WalletActions } from "./wallet.actions";
 
 export interface WalletState {
+    pendingChanges: string | null;
+
     connected: boolean;
     chainId: string;
     
@@ -13,6 +15,8 @@ export interface WalletState {
 }
 
 export const walletState: WalletState = {
+    pendingChanges: null,
+
     connected: false,
     chainId: '0x0',
     
@@ -52,6 +56,14 @@ export const walletReducer = createReducer(
         ...state,
         balanceCredits: credits,
         balanceEth: eth
+    })),
+    on(WalletActions.changesPending, (state, { what }) => ({
+        ...state,
+        pendingChanges: what
+    })),
+    on(WalletActions.clearPendingChanges, (state) => ({
+        ...state,
+        pendingChanges: null
     }))
 );
 

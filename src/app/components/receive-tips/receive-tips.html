@@ -1,0 +1,27 @@
+<div class="receive-tips">
+    @let hasAccount = hasAccount$ | async;
+    @let accountCreating = accountCreating$ | async;
+
+    @if (!hasAccount) {
+        <div class="without-account">
+            <p>
+                You don't have an account set up for this wallet address. To be able to receive tips, you'll need to create one.
+            </p>
+            <button 
+                type="button" 
+                class="btn btn-light" 
+                (click)="createAccount()"
+                [disabled]="accountCreating ?? false"
+            >
+                Create Account
+            </button>
+        </div>
+    }
+                
+    @else {
+        <div class="with-account">
+            
+        </div>
+    }
+
+</div>

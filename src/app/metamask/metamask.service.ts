@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@angular/core";
 import { METAMASK } from "./metamask.provider";
 import MetaMaskSDK, { SDKProvider } from "@metamask/sdk";
-import { catchError, filter, from, map, Observable, tap, throwError } from "rxjs";
+import { catchError, exhaustMap, filter, from, map, Observable, switchMap, takeUntil, takeWhile, tap, throwError, timer } from "rxjs";
 import { getNetwork } from "../blockchain/networks";
 import { fnAbi, hexStr } from "./metamask.utils";
 
@@ -124,5 +124,63 @@ export class MetaMaskService {
         })).pipe(
             map(result => `${result}`)
         );
+    }
+
+    transact(method: string, args: {arg: string | number, bytes?: number, encode?: boolean}[], to: string, sender: string): Observable<string> {
+        if (!this._ethereum) {
+            return throwError(() => new Error("No ethereum provider"));
+        }
+
+        let data = fnAbi(method);
+        for (const arggg of args) {
+            let { arg, bytes, encode } = arggg;
+            bytes = bytes ?? 32;
+            encode = encode ?? true;
+            data += hexStr(arg, encode, 2*bytes);
+        }
+    
+        return from(this._ethereum!.request({
+            method: "eth_sendTransaction",
+            params: [{
+                to,
+                from: sender,
+                data
+            }]
+        })).pipe(
+            map(txHash => <string>txHash)
+        );
+        //     tap((txHash) => onSubmit(<string>txHash)),
+        //     exhaustMap((txHash) => timer(2000).pipe(
+        //         filter(n => n > 0),
+        //         switchMap(() => from(this._ethereum!.request({
+        //             method: "eth_getTransactionReceipt",
+        //             params: [txHash]
+        //         }))),
+        //         filter(tx => tx !== null && tx !== undefined),
+        //         tap((tx: Partial<{status: string}>) => {
+        //             if (tx.status !== "0x1") {
+        //                 throw new Error("Transaction Failed!");
+        //             }
+        //             onComplete();
+        //         }),
+        //         takeWhile(tx => tx.status !== "0x1"))
+        //     ),
+        //     map(() => undefined)
+        // );
+    }
+
+    receipt(txHash: string): Observable<Partial<{transactionHash: string, status: string}> | null | undefined> {
+        if (!this._ethereum) {
+            return throwError(() => new Error("No ethereum provider"));
+        }
+
+        return timer(2000).pipe(
+            switchMap(() => from(this._ethereum!.request({
+                    method: "eth_getTransactionReceipt",
+                    params: [txHash]
+            }))),
+            takeWhile(tx => tx === null || tx === undefined, true)
+        );
+    
     }
 }

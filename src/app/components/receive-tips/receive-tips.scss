@@ -1,0 +1,13 @@
+.without-account {    
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+
+    p {
+        text-align: center;
+    }
+
+    button {
+        align-self: center;
+    }
+}

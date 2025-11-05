@@ -10,7 +10,7 @@
         @let accounts = accounts$ | async;
         <select id="ConnectWalletBar_Accounts">
             @for (account of accounts; track $index) {
-                <option [value]="account">{{ account }}</option>
+                <option [value]="account">{{ account | walletAddress }}</option>
             }
         </select>
         @let chainId = chainId$ | async;

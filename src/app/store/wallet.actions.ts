@@ -9,6 +9,8 @@ export const WalletActions = createActionGroup({
         'Change Chain': props<{chainId: string}>(),
         'Change Chain Success': props<{chainId: string}>(),
         'Set Account Nft': props<{nftId: number}>(),
-        'Set Balances': props<{credits: number, eth: number}>()
+        'Set Balances': props<{credits: number, eth: number}>(),
+        'Changes Pending': props<{what: string}>(),
+        'Clear Pending Changes': emptyProps()
     }
 });

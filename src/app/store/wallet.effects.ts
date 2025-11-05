@@ -3,6 +3,7 @@ import { inject } from "@angular/core";
 import { createEffect, Actions, ofType } from "@ngrx/effects";
 import { WalletActions } from "./wallet.actions";
 import { MetaMaskService } from "../metamask/metamask.service";
+import { NetworkConstants } from "../blockchain/networks.constants";
 
 export const uponConnect = createEffect(
     (actions$ = inject(Actions), mm = inject(MetaMaskService)) => 
@@ -17,6 +18,18 @@ export const uponConnect = createEffect(
         ),
         { functional: true, dispatch: true}
 );
+
+// FIXME: Move contract interaction code from facade to appropiate svcs then use here
+////////// to update the nft & balance data
+// // TODO: Change to mainnet
+// export const uponConnectSuccessSetChain = createEffect(
+//     (actions$ = inject(Actions)) =>
+//         actions$.pipe(
+//             ofType(WalletActions.connectSuccess),
+//             map(() => WalletActions.changeChain({ chainId: NetworkConstants.SCROLL_SEPOLIA }))
+//         ),
+//         { functional: true, dispatch: true}
+// );
 
 export const uponDisconnect = createEffect(
     (actions$ = inject(Actions), mm = inject(MetaMaskService)) => 

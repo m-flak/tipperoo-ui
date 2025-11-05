@@ -1,17 +1,15 @@
 <div class="asset-summary">
     @if (hasAccount) {
-    <div class="account-box">
-        TIPPERACCT#{{ accountId }}
-    </div>
+        <div class="account-box">TIPPERACCT#{{ accountId }}</div>
     }
 
     <div class="credits-box">
-        <img src="/icons/credits.svg" width="24" height="16" alt="Credits" title="Credits">
+        <img src="/icons/credits.svg" width="24" height="16" alt="Credits" title="Credits" />
         &nbsp;
         <span class="credits-amount">{{ credits }}</span>
     </div>
     <div class="eth-box">
-        <img src="/icons/ethereum-asset.svg" width="24" height="16" alt="ETH" title="ETH">
+        <img src="/icons/ethereum-asset.svg" width="24" height="16" alt="ETH" title="ETH" />
         &nbsp;
         <span class="eth-amount">{{ eth }}</span>
     </div>

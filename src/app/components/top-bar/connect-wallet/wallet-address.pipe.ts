@@ -1,10 +1,9 @@
-import { Pipe, PipeTransform } from "@angular/core";
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-    name: 'walletAddress'
+    name: 'walletAddress',
 })
 export class WalletAddressPipe implements PipeTransform {
-    
     transform(value: string | undefined): string {
         if (!value) {
             return '';
@@ -16,5 +15,4 @@ export class WalletAddressPipe implements PipeTransform {
         shrunk += value.substring(value.length - 5, value.length - 1);
         return shrunk;
     }
-
 }

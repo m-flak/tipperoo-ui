@@ -1,15 +1,22 @@
-import { inject, Injectable } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { MetaMaskService } from "../metamask/metamask.service";
-import { selectIsConnected, selectAccounts, selectChainId, selectNftAccountId, selectBalances, selectChangeIsPending } from "./wallet.selectors";
-import { catchError, filter, firstValueFrom, Observable, of } from "rxjs";
-import { WalletActions } from "./wallet.actions";
-import { getNetwork } from "../blockchain/networks";
-import { NetworkConstants } from "../blockchain/networks.constants";
-import { ChangeConstants } from "./changes.constants";
+import { inject, Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { MetaMaskService } from '../metamask/metamask.service';
+import {
+    selectIsConnected,
+    selectAccounts,
+    selectChainId,
+    selectNftAccountId,
+    selectBalances,
+    selectChangeIsPending,
+} from './wallet.selectors';
+import { catchError, filter, firstValueFrom, Observable, of } from 'rxjs';
+import { WalletActions } from './wallet.actions';
+import { getNetwork } from '../blockchain/networks';
+import { NetworkConstants } from '../blockchain/networks.constants';
+import { ChangeConstants } from './changes.constants';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class WalletFacade {
     private _store = inject(Store);
@@ -55,17 +62,20 @@ export class WalletFacade {
         const txHash = await firstValueFrom(
             this._mm.transact(
                 'mintAccountToken(address)',
-                [{
-                    arg: this._mm.getActiveAccount(false),
-                    encode: false
-                }],
+                [
+                    {
+                        arg: this._mm.getActiveAccount(false),
+                        encode: false,
+                    },
+                ],
                 getNetwork(chainId).contracts.nft,
-                this._mm.getActiveAccount()
-        ));
+                this._mm.getActiveAccount(),
+            ),
+        );
 
         this._store.dispatch(WalletActions.changesPending({ what: ChangeConstants.NEW_ACCOUNT }));
-        
-        let sub = this._mm.receipt(txHash).subscribe(result => {
+
+        let sub = this._mm.receipt(txHash).subscribe((result) => {
             if (result !== undefined && result !== null) {
                 if (result.status === '0x1') {
                     this._updateNftData()
@@ -76,6 +86,7 @@ export class WalletFacade {
         });
     }
 
+    // todo: move contract interaction to svc
     async redeemCredits() {
         const chainId = await firstValueFrom(this.getChainId());
         const accountId = await firstValueFrom(this.getNftAccountId());
@@ -83,16 +94,21 @@ export class WalletFacade {
         const txHash = await firstValueFrom(
             this._mm.transact(
                 'cashOutCredits(uint256)',
-                [{
-                    arg: accountId
-                }],
+                [
+                    {
+                        arg: accountId,
+                    },
+                ],
                 getNetwork(chainId).contracts.creditsMgr,
-                this._mm.getActiveAccount()
-        ));
+                this._mm.getActiveAccount(),
+            ),
+        );
 
-        this._store.dispatch(WalletActions.changesPending({ what: ChangeConstants.REDEEM_CREDITS }));
+        this._store.dispatch(
+            WalletActions.changesPending({ what: ChangeConstants.REDEEM_CREDITS }),
+        );
 
-        let sub = this._mm.receipt(txHash).subscribe(result => {
+        let sub = this._mm.receipt(txHash).subscribe((result) => {
             if (result !== undefined && result !== null) {
                 if (result.status === '0x1') {
                     this._updateBalances()
@@ -110,18 +126,22 @@ export class WalletFacade {
 
         const eth = await firstValueFrom(this._mm.getBalance(activeAcct));
 
-        const credits = Number(await firstValueFrom(
-            this._mm.call(
-                 "balanceOf(address)", 
-                [{
-                    arg: this._mm.getActiveAccount(false),
-                    encode: false
-                }],
-                getNetwork(chainId).contracts.creditsMgr
-            ).pipe(
-                catchError(() => of(0))
-            )
-        ));
+        const credits = Number(
+            await firstValueFrom(
+                this._mm
+                    .call(
+                        'balanceOf(address)',
+                        [
+                            {
+                                arg: this._mm.getActiveAccount(false),
+                                encode: false,
+                            },
+                        ],
+                        getNetwork(chainId).contracts.creditsMgr,
+                    )
+                    .pipe(catchError(() => of(0))),
+            ),
+        );
 
         this._store.dispatch(WalletActions.setBalances({ credits, eth }));
     }
@@ -130,32 +150,42 @@ export class WalletFacade {
     private async _updateNftData() {
         const chainId = await firstValueFrom(this.getChainId());
 
-        const balance = Number(await firstValueFrom(
-            this._mm.call(
-                "balanceOf(address)", 
-                [{
-                    arg: this._mm.getActiveAccount(false),
-                    encode: false
-                }],
-                getNetwork(chainId).contracts.nft
-            ).pipe(
-                catchError(() => of(0))
-            )
-        ));
+        const balance = Number(
+            await firstValueFrom(
+                this._mm
+                    .call(
+                        'balanceOf(address)',
+                        [
+                            {
+                                arg: this._mm.getActiveAccount(false),
+                                encode: false,
+                            },
+                        ],
+                        getNetwork(chainId).contracts.nft,
+                    )
+                    .pipe(catchError(() => of(0))),
+            ),
+        );
 
         if (balance > 0) {
-            const tokenId = Number(await firstValueFrom(
-                this._mm.call(
-                    "getAccountTokenId(address)", 
-                    [{
-                        arg: this._mm.getActiveAccount(false),
-                        encode: false
-                    }],
-                    getNetwork(chainId).contracts.nft
-                ).pipe(
-                    catchError(() => of(0)) // 0 is no account nft
-                )
-            ));
+            const tokenId = Number(
+                await firstValueFrom(
+                    this._mm
+                        .call(
+                            'getAccountTokenId(address)',
+                            [
+                                {
+                                    arg: this._mm.getActiveAccount(false),
+                                    encode: false,
+                                },
+                            ],
+                            getNetwork(chainId).contracts.nft,
+                        )
+                        .pipe(
+                            catchError(() => of(0)), // 0 is no account nft
+                        ),
+                ),
+            );
 
             this._store.dispatch(WalletActions.setAccountNft({ nftId: tokenId }));
         } else {

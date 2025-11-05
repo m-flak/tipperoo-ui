@@ -1,12 +1,9 @@
 @let isConnected = connected$ | async;
 
-<div
-    class="connect-wallet-bar"
->
+<div class="connect-wallet-bar">
     @if (!isConnected) {
         <button (click)="connect()">Connect Wallet</button>
-    }
-    @else {
+    } @else {
         @let accounts = accounts$ | async;
         <select id="ConnectWalletBar_Accounts">
             @for (account of accounts; track $index) {

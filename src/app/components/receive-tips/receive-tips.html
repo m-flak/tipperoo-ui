@@ -8,37 +8,39 @@
     @if (!hasAccount) {
         <div class="without-account">
             <p>
-                You don't have an account set up for this wallet address. To be able to receive tips, you'll need to create one.
+                You don't have an account set up for this wallet address. To be able to receive
+                tips, you'll need to create one.
             </p>
-            <button 
-                type="button" 
-                class="btn btn-light" 
+            <button
+                type="button"
+                class="btn btn-light"
                 (click)="createAccount()"
                 [disabled]="accountCreating ?? false"
             >
                 Create Account
             </button>
         </div>
-    }
-                
-    @else {
+
+    } @else {
         <div class="with-account">
             <p>Your Account ID:</p>
             <span class="account-id">{{ accountId }}</span>
-            <p>Simply provide your Account ID, and anyone send you credits, tokens, or Ethereum with Tipperoo!</p>
+            <p>
+                Simply provide your Account ID, and anyone send you credits, tokens, or Ethereum
+                with Tipperoo!
+            </p>
             @if (myBalance === 0) {
                 <p>
-                    You don't have any credits yet. When you get some, you'll be able to cash them out to your wallet from here.
-                    <br>
-                    To ensure that you receive your credits, be sure to provide the correct account ID to tippers.
+                    You don't have any credits yet. When you get some, you'll be able to cash them
+                    out to your wallet from here.
+                    <br />
+                    To ensure that you receive your credits, be sure to provide the correct account
+                    ID to tippers.
                 </p>
-            }
-            @else {
-                <p>
-                    You have credits! Would you like to redeem them now?
-                </p>
-                <button 
-                    type="button" 
+            } @else {
+                <p>You have credits! Would you like to redeem them now?</p>
+                <button
+                    type="button"
                     class="btn btn-light"
                     (click)="redeemCredits()"
                     [disabled]="creditsRedeeming ?? false"
@@ -48,5 +50,4 @@
             }
         </div>
     }
-
 </div>

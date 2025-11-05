@@ -1,12 +1,12 @@
-import { createFeature, createReducer, on } from "@ngrx/store";
-import { WalletActions } from "./wallet.actions";
+import { createFeature, createReducer, on } from '@ngrx/store';
+import { WalletActions } from './wallet.actions';
 
 export interface WalletState {
     pendingChanges: string | null;
 
     connected: boolean;
     chainId: string;
-    
+
     accounts: string[];
     nftId: number;
 
@@ -19,13 +19,13 @@ export const walletState: WalletState = {
 
     connected: false,
     chainId: '0x0',
-    
+
     accounts: [],
     nftId: 0,
 
     balanceCredits: 0,
-    balanceEth: 0
-}
+    balanceEth: 0,
+};
 
 export const walletReducer = createReducer(
     walletState,
@@ -33,7 +33,7 @@ export const walletReducer = createReducer(
         ...state,
         connected: true,
         chainId: chainId,
-        accounts: accounts
+        accounts: accounts,
     })),
     on(WalletActions.disconnect, (state) => ({
         ...state,
@@ -42,32 +42,32 @@ export const walletReducer = createReducer(
         accounts: [],
         nftId: 0,
         balanceCredits: 0,
-        balanceEth: 0
+        balanceEth: 0,
     })),
-    on(WalletActions.changeChain, WalletActions.changeChainSuccess, (state, {chainId}) => ({
+    on(WalletActions.changeChain, WalletActions.changeChainSuccess, (state, { chainId }) => ({
         ...state,
-        chainId: chainId
+        chainId: chainId,
     })),
     on(WalletActions.setAccountNft, (state, { nftId }) => ({
         ...state,
-        nftId
+        nftId,
     })),
-    on(WalletActions.setBalances, (state, { credits, eth}) => ({
+    on(WalletActions.setBalances, (state, { credits, eth }) => ({
         ...state,
         balanceCredits: credits,
-        balanceEth: eth
+        balanceEth: eth,
     })),
     on(WalletActions.changesPending, (state, { what }) => ({
         ...state,
-        pendingChanges: what
+        pendingChanges: what,
     })),
     on(WalletActions.clearPendingChanges, (state) => ({
         ...state,
-        pendingChanges: null
-    }))
+        pendingChanges: null,
+    })),
 );
 
 export const walletFeature = createFeature({
-    name: "wallet",
-    reducer: walletReducer
+    name: 'wallet',
+    reducer: walletReducer,
 });

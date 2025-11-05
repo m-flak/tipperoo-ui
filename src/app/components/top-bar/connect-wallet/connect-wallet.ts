@@ -9,29 +9,29 @@ import { WalletFacade } from '../../../store/wallet.facade';
 import { WalletAddressPipe } from './wallet-address.pipe';
 
 @Component({
-  selector: 'app-connect-wallet',
-  imports: [AsyncPipe, ChainIcon, WalletAddressPipe],
-  templateUrl: './connect-wallet.html',
-  styleUrl: './connect-wallet.scss',
+    selector: 'app-connect-wallet',
+    imports: [AsyncPipe, ChainIcon, WalletAddressPipe],
+    templateUrl: './connect-wallet.html',
+    styleUrl: './connect-wallet.scss',
 })
 export class ConnectWallet {
-  private _facade = inject(WalletFacade);
-  
-  connected$ = this._facade.getIsConnected();
-  accounts$ = this._facade.getAccounts();
-  chainId$ = this._facade.getChainId();
+    private _facade = inject(WalletFacade);
 
-  constructor() {}
-  
-  async connect() {
-    await this._facade.connectWallet();
-  }
+    connected$ = this._facade.getIsConnected();
+    accounts$ = this._facade.getAccounts();
+    chainId$ = this._facade.getChainId();
 
-  disconnect() {
-    this._facade.disconnectWallet();
-  }
+    constructor() {}
 
-  async switchNetwork() {
-    await this._facade.switchNetwork();
-  }
+    async connect() {
+        await this._facade.connectWallet();
+    }
+
+    disconnect() {
+        this._facade.disconnectWallet();
+    }
+
+    async switchNetwork() {
+        await this._facade.switchNetwork();
+    }
 }

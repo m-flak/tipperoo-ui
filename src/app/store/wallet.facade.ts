@@ -49,6 +49,7 @@ export class WalletFacade {
         await this._updateBalances();
     }
 
+    // todo: move contract interaction to svc
     async createAccount() {
         const chainId = await firstValueFrom(this.getChainId());
         const txHash = await firstValueFrom(
@@ -75,6 +76,34 @@ export class WalletFacade {
         });
     }
 
+    async redeemCredits() {
+        const chainId = await firstValueFrom(this.getChainId());
+        const accountId = await firstValueFrom(this.getNftAccountId());
+
+        const txHash = await firstValueFrom(
+            this._mm.transact(
+                'cashOutCredits(uint256)',
+                [{
+                    arg: accountId
+                }],
+                getNetwork(chainId).contracts.creditsMgr,
+                this._mm.getActiveAccount()
+        ));
+
+        this._store.dispatch(WalletActions.changesPending({ what: ChangeConstants.REDEEM_CREDITS }));
+
+        let sub = this._mm.receipt(txHash).subscribe(result => {
+            if (result !== undefined && result !== null) {
+                if (result.status === '0x1') {
+                    this._updateBalances()
+                        .then(() => this._store.dispatch(WalletActions.clearPendingChanges()))
+                        .then(() => sub.unsubscribe());
+                }
+            }
+        });
+    }
+
+    // todo: move contract interaction to svc
     private async _updateBalances() {
         const chainId = await firstValueFrom(this.getChainId());
         const activeAcct = this._mm.getActiveAccount();
@@ -97,6 +126,7 @@ export class WalletFacade {
         this._store.dispatch(WalletActions.setBalances({ credits, eth }));
     }
 
+    // todo: move contract interaction to svc
     private async _updateNftData() {
         const chainId = await firstValueFrom(this.getChainId());
 

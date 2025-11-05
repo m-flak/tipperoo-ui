@@ -1,4 +1,4 @@
-.without-account {    
+.without-account, .with-account {    
     justify-content: center;
     display: flex;
     flex-direction: column;
@@ -10,4 +10,10 @@
     button {
         align-self: center;
     }
+}
+
+.account-id {
+    text-align: center;
+    font-size: xx-large;
+    border: #ffffff6c solid 1px;
 }

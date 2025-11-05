@@ -1,6 +1,9 @@
 <div class="receive-tips">
     @let hasAccount = hasAccount$ | async;
     @let accountCreating = accountCreating$ | async;
+    @let myBalance = myBalance$ | async;
+    @let accountId = accountId$ | async;
+    @let creditsRedeeming = creditsRedeeming$ | async;
 
     @if (!hasAccount) {
         <div class="without-account">
@@ -20,7 +23,29 @@
                 
     @else {
         <div class="with-account">
-            
+            <p>Your Account ID:</p>
+            <span class="account-id">{{ accountId }}</span>
+            <p>Simply provide your Account ID, and anyone send you credits, tokens, or Ethereum with Tipperoo!</p>
+            @if (myBalance === 0) {
+                <p>
+                    You don't have any credits yet. When you get some, you'll be able to cash them out to your wallet from here.
+                    <br>
+                    To ensure that you receive your credits, be sure to provide the correct account ID to tippers.
+                </p>
+            }
+            @else {
+                <p>
+                    You have credits! Would you like to redeem them now?
+                </p>
+                <button 
+                    type="button" 
+                    class="btn btn-light"
+                    (click)="redeemCredits()"
+                    [disabled]="creditsRedeeming ?? false"
+                >
+                    Click to Redeem
+                </button>
+            }
         </div>
     }
 

@@ -15,8 +15,15 @@ export class ReceiveTips {
 
   hasAccount$ = this._facade.getNftAccountId().pipe(map(id => id > 0));
   accountCreating$ = this._facade.getChangePending(ChangeConstants.NEW_ACCOUNT);
+  myBalance$ = this._facade.getBalances().pipe(map(({ credits}) => credits));
+  accountId$ = this._facade.getNftAccountId();
+  creditsRedeeming$ = this._facade.getChangePending(ChangeConstants.REDEEM_CREDITS);
 
   async createAccount() {
     await this._facade.createAccount();
+  }
+
+  async redeemCredits() {
+    await this._facade.redeemCredits();
   }
 }

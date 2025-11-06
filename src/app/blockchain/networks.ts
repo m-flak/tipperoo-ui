@@ -25,6 +25,7 @@ export const NETWORKS = {
             nft: import.meta.env.NG_APP_NFT_CONTRACT,
             creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT,
         },
+        alchemyBaseUrl: 'https://scroll-mainnet.g.alchemy.com/v2/',
     },
     scrollSepolia: {
         chainId: '0x8274F',
@@ -40,5 +41,6 @@ export const NETWORKS = {
             nft: import.meta.env.NG_APP_NFT_CONTRACT_TESTNET,
             creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_TESTNET,
         },
+        alchemyBaseUrl: 'https://scroll-sepolia.g.alchemy.com/v2/',
     },
 };

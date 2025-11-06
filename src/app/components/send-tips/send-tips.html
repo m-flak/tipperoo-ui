@@ -1,1 +1,12 @@
-<p>send-tips works!</p>
+<div class="send-tips">
+    <p>
+        Tipperoo makes it easy to send tips to other people. Simply provide the Account ID of the
+        person you wish to tip.
+        <br /><br />
+        Don't have any credits? No problem! Scroll down to purchase credits. It'll save you gas!
+        <br /><br />
+        You can also send tokens that you own using Tipperoo.
+    </p>
+    @let buyCreditsAllowance = buyCreditsAllowance$ | async;
+    <app-buy-credits [allowance]="buyCreditsAllowance ?? 0"></app-buy-credits>
+</div>

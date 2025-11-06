@@ -1,0 +1,30 @@
+div {
+    display: flex;
+    flex-direction: column;
+
+    div {
+        display: flex;
+        gap: 0.222rem;
+        flex-direction: row;
+    }
+}
+
+input {
+    min-width: 200px;
+    background-color: rgba(58, 64, 58, 0.55);
+    color: white;
+    border: #ffffff7b solid 1px;
+    border-radius: 8px;
+}
+
+.header {
+    font-weight: 800;
+    font-variant-caps: all-small-caps;
+    border-bottom: white solid 1px;
+}
+
+.allowance {
+    font-size: 9pt;
+    margin: 8px;
+    color: yellow;
+}

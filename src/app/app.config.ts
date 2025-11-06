@@ -13,12 +13,16 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideEffects } from '@ngrx/effects';
 import { walletFeature } from './store/wallet.reducer';
 import * as WalletEffects from './store/wallet.effects';
+import * as PriceEffects from './store/price.effects';
+import { priceFeature } from './store/price.reducer';
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideBrowserGlobalErrorListeners(),
         provideZonelessChangeDetection(),
         provideRouter(routes),
+        provideHttpClient(),
         provideMetamask(),
         provideStore(),
         provideStoreDevtools({
@@ -30,6 +34,7 @@ export const appConfig: ApplicationConfig = {
             connectInZone: true, // If set to true, the connection is established within the Angular zone
         }),
         provideState(walletFeature),
-        provideEffects(WalletEffects),
+        provideState(priceFeature),
+        provideEffects(WalletEffects, PriceEffects),
     ],
 };

@@ -1,0 +1,26 @@
+<div>
+    <span class="header">Buy Credits</span>
+    <span class="allowance"
+        >You can afford <strong>{{ allowance }}</strong> credits.</span
+    >
+    <div>
+        <input
+            #amountInput
+            type="number"
+            [max]="allowance"
+            min="0"
+            [disabled]="disable"
+            id="BuyCredits_Amount"
+            [(ngModel)]="amount"
+            [value]="0"
+        />
+        <button
+            type="button"
+            class="btn btn-light"
+            [disabled]="disable || amount === 0 || amountInput.value === ''"
+            (click)="clickBuy()"
+        >
+            Buy Credits
+        </button>
+    </div>
+</div>

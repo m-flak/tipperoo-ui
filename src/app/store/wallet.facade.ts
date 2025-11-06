@@ -119,6 +119,32 @@ export class WalletFacade {
         });
     }
 
+    async buyCredits(amount: number) {
+        const chainId = await firstValueFrom(this.getChainId());
+
+        const txHash = await firstValueFrom(
+            this._mm.transact(
+                'depositCredits()',
+                [],
+                getNetwork(chainId).contracts.creditsMgr,
+                this._mm.getActiveAccount(),
+                BigInt(amount * 1e18),
+            ),
+        );
+
+        this._store.dispatch(WalletActions.changesPending({ what: ChangeConstants.BUY_CREDITS }));
+
+        let sub = this._mm.receipt(txHash).subscribe((result) => {
+            if (result !== undefined && result !== null) {
+                if (result.status === '0x1') {
+                    this._updateBalances()
+                        .then(() => this._store.dispatch(WalletActions.clearPendingChanges()))
+                        .then(() => sub.unsubscribe());
+                }
+            }
+        });
+    }
+
     // todo: move contract interaction to svc
     private async _updateBalances() {
         const chainId = await firstValueFrom(this.getChainId());

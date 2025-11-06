@@ -8,5 +8,10 @@
         You can also send tokens that you own using Tipperoo.
     </p>
     @let buyCreditsAllowance = buyCreditsAllowance$ | async;
-    <app-buy-credits [allowance]="buyCreditsAllowance ?? 0"></app-buy-credits>
+    @let creditsPurchasing = creditsPurchasing$ | async;
+    <app-buy-credits
+        [allowance]="buyCreditsAllowance ?? 0"
+        [disable]="creditsPurchasing ?? false"
+        (buy)="buyCredits($event)"
+    ></app-buy-credits>
 </div>

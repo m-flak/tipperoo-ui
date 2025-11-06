@@ -10,6 +10,8 @@ declare interface Env {
     readonly NG_APP_NFT_CONTRACT_TESTNET: string;
     readonly NG_APP_CMGR_CONTRACT: string;
     readonly NG_APP_CMGR_CONTRACT_TESTNET: string;
+    readonly NG_APP_TIPPER_CONTRACT: string;
+    readonly NG_APP_TIPPER_CONTRACT_TESTNET: string;
 }
 
 // Choose how to access the environment variables.

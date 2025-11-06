@@ -159,6 +159,7 @@ export class MetaMaskService {
         args: { arg: string | number; bytes?: number; encode?: boolean }[],
         to: string,
         sender: string,
+        value?: bigint,
     ): Observable<string> {
         if (!this._ethereum) {
             return throwError(() => new Error('No ethereum provider'));
@@ -180,6 +181,7 @@ export class MetaMaskService {
                         to,
                         from: sender,
                         data,
+                        value: value ? '0x' + value.toString(16) : undefined,
                     },
                 ],
             }),

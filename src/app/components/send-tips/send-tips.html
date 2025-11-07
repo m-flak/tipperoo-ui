@@ -1,4 +1,11 @@
 <div class="send-tips">
+    @let creditsBalance = creditsBalance$ | async;
+    @let creditsSending = creditsSending$ | async;
+    <app-send-credits
+        [totalBalance]="creditsBalance ?? 0"
+        [disable]="creditsSending ?? false"
+        (send)="sendCredits($event)"
+    ></app-send-credits>
     <p>
         Tipperoo makes it easy to send tips to other people. Simply provide the Account ID of the
         person you wish to tip.

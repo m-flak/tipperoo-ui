@@ -2,4 +2,5 @@ export enum ChangeConstants {
     NEW_ACCOUNT = 'NEW_ACCOUNT',
     REDEEM_CREDITS = 'REDEEM_CREDITS',
     BUY_CREDITS = 'BUY_CREDITS',
+    SEND_CREDITS = 'SEND_CREDITS',
 }

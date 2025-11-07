@@ -119,6 +119,7 @@ export class WalletFacade {
         });
     }
 
+    // todo: move contract interaction to svc
     async buyCredits(amount: number) {
         const chainId = await firstValueFrom(this.getChainId());
 
@@ -133,6 +134,39 @@ export class WalletFacade {
         );
 
         this._store.dispatch(WalletActions.changesPending({ what: ChangeConstants.BUY_CREDITS }));
+
+        let sub = this._mm.receipt(txHash).subscribe((result) => {
+            if (result !== undefined && result !== null) {
+                if (result.status === '0x1') {
+                    this._updateBalances()
+                        .then(() => this._store.dispatch(WalletActions.clearPendingChanges()))
+                        .then(() => sub.unsubscribe());
+                }
+            }
+        });
+    }
+
+    // todo: move contract interaction to svc
+    async sendCredits(amount: number, to: number) {
+        const chainId = await firstValueFrom(this.getChainId());
+
+        const txHash = await firstValueFrom(
+            this._mm.transact(
+                'SendTipCredits(uint256,uint256)',
+                [
+                    {
+                        arg: amount,
+                    },
+                    {
+                        arg: to,
+                    },
+                ],
+                getNetwork(chainId).contracts.tipper,
+                this._mm.getActiveAccount(),
+            ),
+        );
+
+        this._store.dispatch(WalletActions.changesPending({ what: ChangeConstants.SEND_CREDITS }));
 
         let sub = this._mm.receipt(txHash).subscribe((result) => {
             if (result !== undefined && result !== null) {

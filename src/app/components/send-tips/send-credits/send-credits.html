@@ -1,0 +1,43 @@
+<div>
+    <div>
+        <span>Send Credits:</span>
+        <input
+            #amountInput
+            type="number"
+            [max]="totalBalance"
+            min="1"
+            [disabled]="disable"
+            id="SensCredits_Amount"
+            [(ngModel)]="amount"
+            [value]="0"
+        />
+    </div>
+    <div>
+        <span class="tipper-acct">TIPPERACCT# :</span>
+        <input
+            #accountInput
+            type="number"
+            min="1"
+            [disabled]="disable"
+            id="SensCredits_ToAccount"
+            [(ngModel)]="toAccount"
+            [value]=""
+        />
+    </div>
+    <div>
+        <button
+            type="button"
+            class="btn btn-light"
+            [disabled]="
+                disable ||
+                amount === 0 ||
+                toAccount <= 0 ||
+                amountInput.value === '' ||
+                accountInput.value === ''
+            "
+            (click)="clickSend()"
+        >
+            Send Tip
+        </button>
+    </div>
+</div>

@@ -24,7 +24,7 @@ export const NETWORKS = {
         contracts: {
             nft: import.meta.env.NG_APP_NFT_CONTRACT,
             creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT,
-            tipper: import.meta.env.NG_APP_TIPPER_CONTRACT
+            tipper: import.meta.env.NG_APP_TIPPER_CONTRACT,
         },
         alchemyBaseUrl: 'https://scroll-mainnet.g.alchemy.com/v2/',
     },
@@ -41,7 +41,7 @@ export const NETWORKS = {
         contracts: {
             nft: import.meta.env.NG_APP_NFT_CONTRACT_TESTNET,
             creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_TESTNET,
-            tipper: import.meta.env.NG_APP_TIPPER_CONTRACT_TESTNET
+            tipper: import.meta.env.NG_APP_TIPPER_CONTRACT_TESTNET,
         },
         alchemyBaseUrl: 'https://scroll-sepolia.g.alchemy.com/v2/',
     },

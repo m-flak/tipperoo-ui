@@ -1,0 +1,40 @@
+div:only-child {
+    border: #ffffff6c solid 1px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    div {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 1rem;
+
+        span {
+            font-size: larger;
+            font-weight: 700;
+            font-variant-caps: all-small-caps;
+        }
+    }
+
+    div:last-child {
+        max-width: 300px;
+        flex-grow: 1;
+        justify-content: center;
+
+        button {
+            width: 100%;
+        }
+    }
+}
+
+.tipper-acct {
+    color: hotpink;
+}
+
+input {
+    background-color: rgba(58, 64, 58, 0.55);
+    color: white;
+    border: #ffffff7b solid 1px;
+    border-radius: 8px;
+}

@@ -14,6 +14,8 @@ import { WalletActions } from './wallet.actions';
 import { getNetwork } from '../blockchain/networks';
 import { NetworkConstants } from '../blockchain/networks.constants';
 import { ChangeConstants } from './changes.constants';
+import { CreditsManagerService } from '../blockchain/contracts/credits-manager.service';
+import { NftService } from '../blockchain/contracts/nft.service';
 
 @Injectable({
     providedIn: 'root',
@@ -21,6 +23,8 @@ import { ChangeConstants } from './changes.constants';
 export class WalletFacade {
     private _store = inject(Store);
     private _mm = inject(MetaMaskService);
+    private _creditsMgr = inject(CreditsManagerService);
+    private _nft = inject(NftService);
 
     constructor() {}
 
@@ -34,8 +38,8 @@ export class WalletFacade {
     async connectWallet() {
         this._store.dispatch(WalletActions.connect());
 
-        await this._updateNftData();
-        await this._updateBalances();
+        // await this._updateNftData();
+        // await this._updateBalances();
     }
 
     disconnectWallet() {
@@ -52,8 +56,8 @@ export class WalletFacade {
             this._store.dispatch(WalletActions.changeChain({ chainId }));
         }
 
-        await this._updateNftData();
-        await this._updateBalances();
+        // await this._updateNftData();
+        // await this._updateBalances();
     }
 
     // todo: move contract interaction to svc
@@ -179,72 +183,27 @@ export class WalletFacade {
         });
     }
 
-    // todo: move contract interaction to svc
     private async _updateBalances() {
         const chainId = await firstValueFrom(this.getChainId());
         const activeAcct = this._mm.getActiveAccount();
 
         const eth = await firstValueFrom(this._mm.getBalance(activeAcct));
 
-        const credits = Number(
-            await firstValueFrom(
-                this._mm
-                    .call(
-                        'balanceOf(address)',
-                        [
-                            {
-                                arg: this._mm.getActiveAccount(false),
-                                encode: false,
-                            },
-                        ],
-                        getNetwork(chainId).contracts.creditsMgr,
-                    )
-                    .pipe(catchError(() => of(0))),
-            ),
-        );
+        const credits = await firstValueFrom(this._creditsMgr.balanceOf(activeAcct, chainId));
 
         this._store.dispatch(WalletActions.setBalances({ credits, eth }));
     }
 
-    // todo: move contract interaction to svc
     private async _updateNftData() {
         const chainId = await firstValueFrom(this.getChainId());
 
-        const balance = Number(
-            await firstValueFrom(
-                this._mm
-                    .call(
-                        'balanceOf(address)',
-                        [
-                            {
-                                arg: this._mm.getActiveAccount(false),
-                                encode: false,
-                            },
-                        ],
-                        getNetwork(chainId).contracts.nft,
-                    )
-                    .pipe(catchError(() => of(0))),
-            ),
+        const balance = await firstValueFrom(
+            this._nft.balanceOf(this._mm.getActiveAccount(), chainId),
         );
 
         if (balance > 0) {
-            const tokenId = Number(
-                await firstValueFrom(
-                    this._mm
-                        .call(
-                            'getAccountTokenId(address)',
-                            [
-                                {
-                                    arg: this._mm.getActiveAccount(false),
-                                    encode: false,
-                                },
-                            ],
-                            getNetwork(chainId).contracts.nft,
-                        )
-                        .pipe(
-                            catchError(() => of(0)), // 0 is no account nft
-                        ),
-                ),
+            const tokenId = await firstValueFrom(
+                this._nft.getAccountTokenId(this._mm.getActiveAccount(), chainId),
             );
 
             this._store.dispatch(WalletActions.setAccountNft({ nftId: tokenId }));

@@ -7,7 +7,7 @@ import { stripZeroX } from '../../metamask/metamask.utils';
 @Injectable({
     providedIn: 'root',
 })
-export class CreditsManagerService {
+export class NftService {
     private _mm = inject(MetaMaskService);
 
     balanceOf(account: string, chainId: string): Observable<number> {
@@ -20,10 +20,28 @@ export class CreditsManagerService {
                         encode: false,
                     },
                 ],
-                getNetwork(chainId).contracts.creditsMgr,
+                getNetwork(chainId).contracts.nft,
             )
             .pipe(
                 catchError(() => of(0)),
+                map((result) => Number(result)),
+            );
+    }
+
+    getAccountTokenId(account: string, chainId: string): Observable<number> {
+        return this._mm
+            .call(
+                'getAccountTokenId(address)',
+                [
+                    {
+                        arg: stripZeroX(account),
+                        encode: false,
+                    },
+                ],
+                getNetwork(chainId).contracts.nft,
+            )
+            .pipe(
+                catchError(() => of(0)), // 0 is no account nft
                 map((result) => Number(result)),
             );
     }

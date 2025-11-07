@@ -28,3 +28,5 @@ export const hexStr = (
 
     return hexString;
 };
+
+export const stripZeroX = (addr: string) => (addr.startsWith('0x') ? addr.replace('0x', '') : addr);

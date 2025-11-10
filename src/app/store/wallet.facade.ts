@@ -37,9 +37,6 @@ export class WalletFacade {
 
     async connectWallet() {
         this._store.dispatch(WalletActions.connect());
-
-        // await this._updateNftData();
-        // await this._updateBalances();
     }
 
     disconnectWallet() {
@@ -55,9 +52,6 @@ export class WalletFacade {
             chainId = NetworkConstants.SCROLL_SEPOLIA;
             this._store.dispatch(WalletActions.changeChain({ chainId }));
         }
-
-        // await this._updateNftData();
-        // await this._updateBalances();
     }
 
     // todo: move contract interaction to svc
@@ -133,7 +127,7 @@ export class WalletFacade {
                 [],
                 getNetwork(chainId).contracts.creditsMgr,
                 this._mm.getActiveAccount(),
-                BigInt(amount * 1e18),
+                BigInt(Math.floor(amount * 1e18)),
             ),
         );
 

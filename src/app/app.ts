@@ -23,6 +23,7 @@ export class App implements OnInit {
     connected$ = this._facade.getIsConnected();
 
     ngOnInit(): void {
+        this._facade.disconnectWallet(); //force popup
         this._facadePrice.getPrices();
     }
 }

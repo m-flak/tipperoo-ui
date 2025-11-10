@@ -24,6 +24,7 @@ export class ConnectWallet {
     constructor() {}
 
     async connect() {
+        this._facade.disconnectWallet(); // force popup
         await this._facade.connectWallet();
     }
 

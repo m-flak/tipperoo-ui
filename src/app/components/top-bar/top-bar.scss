@@ -4,12 +4,19 @@
     justify-content: space-between;
     background-color: rgb(30, 31, 33);
 
-    h1 {
-        margin: 0;
-        font-size: 18pt;
-        align-self: anchor-center;
-        margin-left: 0.55rem;
-        font-weight: 600;
+    div:first-child {
+        display: inline-flex;
+        
+        img {
+            align-self: center;
+        }
+        h1 {
+            margin: 0;
+            font-size: 18pt;
+            align-self: anchor-center;
+            margin-left: 0.55rem;
+            font-weight: 600;
+        }
     }
 
     a {

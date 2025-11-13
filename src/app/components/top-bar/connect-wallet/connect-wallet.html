@@ -11,7 +11,7 @@
             }
         </select>
         @let chainId = chainId$ | async;
-        <app-chain-icon [chainId]="chainId!" (click)="switchNetwork()"></app-chain-icon>
+        <app-chain-list [chainId]="chainId!" (changeChain)="switchNetwork($event)"></app-chain-list>
         <button (click)="disconnect()">Disconnect Wallet</button>
     }
 </div>

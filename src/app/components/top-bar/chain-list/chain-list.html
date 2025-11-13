@@ -1,0 +1,111 @@
+<div ngbDropdown class="d-inline-block">
+    <button type="button" class="btn btn-outline-light" id="ChainList_Picker" ngbDropdownToggle>
+        @if (chainId === chainIds.SCROLL_SEPOLIA) {
+            <img
+                src="/icons/scroll-sepolia.svg"
+                width="24"
+                height="24"
+                alt="Scroll Sepolia"
+                title="Scroll Sepolia"
+            />
+        } @else if (chainId === chainIds.SCROLL) {
+            <img
+                src="/icons/scroll.svg"
+                width="24"
+                height="24"
+                alt="Scroll Mainnet"
+                title="Scroll Mainnet"
+            />
+        } @else if (chainId === chainIds.BASE) {
+            <img
+                src="/icons/base.svg"
+                width="24"
+                height="24"
+                alt="Base Mainnet"
+                title="Base Mainnet"
+            />
+        } @else if (chainId === chainIds.BASE_SEPOLIA) {
+            <img
+                src="/icons/base-sepolia.svg"
+                width="24"
+                height="24"
+                alt="Base Sepolia"
+                title="Base Sepolia"
+            />
+        } @else {
+            <img
+                src="/icons/unsupported.svg"
+                width="24"
+                height="24"
+                alt="Unsupported"
+                title="Unsupported"
+            />
+        }
+    </button>
+    <div ngbDropdownMenu aria-labelledby="ChainList_Picker">
+        <button
+            #scroll
+            ngbDropdownItem
+            [attr.data-chain-id]="chainIds.SCROLL"
+            [disabled]="scroll.dataset['chainId'] === chainId"
+            (click)="clickChain(chainIds.SCROLL)"
+        >
+            <img
+                src="/icons/scroll.svg"
+                width="24"
+                height="24"
+                alt="Scroll Mainnet"
+                title="Scroll Mainnet"
+            />
+            Scroll
+        </button>
+        <button
+            #scrollSepolia
+            ngbDropdownItem
+            [attr.data-chain-id]="chainIds.SCROLL_SEPOLIA"
+            [disabled]="scrollSepolia.dataset['chainId'] === chainId"
+            (click)="clickChain(chainIds.SCROLL_SEPOLIA)"
+        >
+            <img
+                src="/icons/scroll-sepolia.svg"
+                width="24"
+                height="24"
+                alt="Scroll Sepolia"
+                title="Scroll Sepolia"
+            />
+            Scroll Sepolia [TEST]
+        </button>
+        <button
+            #base
+            ngbDropdownItem
+            [attr.data-chain-id]="chainIds.BASE"
+            [disabled]="base.dataset['chainId'] === chainId"
+            (click)="clickChain(chainIds.BASE)"
+        >
+            <img
+                src="/icons/base.svg"
+                width="24"
+                height="24"
+                alt="Base Mainnet"
+                title="Base Mainnet"
+            />
+            Base
+        </button>
+        <button
+            #baseSepolia
+            ngbDropdownItem
+            [attr.data-chain-id]="chainIds.BASE_SEPOLIA"
+            [disabled]="baseSepolia.dataset['chainId'] === chainId"
+            (click)="clickChain(chainIds.BASE_SEPOLIA)"
+        >
+            <img
+                src="/icons/base-sepolia.svg"
+                width="24"
+                height="24"
+                alt="Base Sepolia"
+                title="Base Sepolia"
+            />
+            Base Sepolia [TEST]
+        </button>
+    </div>
+</div>

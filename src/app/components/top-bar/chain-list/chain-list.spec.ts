@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ChainIcon } from './chain-icon';
+import { ChainList } from './chain-list';
 
-describe('ChainIcon', () => {
-    let component: ChainIcon;
-    let fixture: ComponentFixture<ChainIcon>;
+describe('ChainList', () => {
+    let component: ChainList;
+    let fixture: ComponentFixture<ChainList>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ChainIcon],
+            imports: [ChainList],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(ChainIcon);
+        fixture = TestBed.createComponent(ChainList);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

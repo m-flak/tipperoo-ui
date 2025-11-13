@@ -2,6 +2,10 @@ import { NetworkConstants } from './networks.constants';
 
 export const getNetwork = (chainId: string) => {
     switch (chainId) {
+        case NetworkConstants.BASE:
+            return NETWORKS.base;
+        case NetworkConstants.BASE_SEPOLIA:
+            return NETWORKS.baseSepolia;
         case NetworkConstants.SCROLL:
             return NETWORKS.scroll;
         case NetworkConstants.SCROLL_SEPOLIA:
@@ -44,5 +48,39 @@ export const NETWORKS = {
             tipper: import.meta.env.NG_APP_TIPPER_CONTRACT_TESTNET,
         },
         alchemyBaseUrl: 'https://scroll-sepolia.g.alchemy.com/v2/',
+    },
+    baseSepolia: {
+        chainId: '0x14A34',
+        name: 'Base Sepolia',
+        rpcUrls: ['https://sepolia.base.org'],
+        nativeCurrency: {
+            name: 'Ethereum',
+            symbol: 'ETH',
+            decimals: 18,
+        },
+        blockExplorerUrls: ['https://sepolia.basescan.org/'],
+        contracts: {
+            nft: import.meta.env.NG_APP_NFT_CONTRACT_BASE_TESTNET,
+            creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_BASE_TESTNET,
+            tipper: import.meta.env.NG_APP_TIPPER_CONTRACT_BASE_TESTNET,
+        },
+        alchemyBaseUrl: 'https://base-sepolia.g.alchemy.com/v2/',
+    },
+    base: {
+        chainId: '0x2105',
+        name: 'Base',
+        rpcUrls: ['https://mainnet.base.org'],
+        nativeCurrency: {
+            name: 'Ethereum',
+            symbol: 'ETH',
+            decimals: 18,
+        },
+        blockExplorerUrls: ['https://basescan.org/'],
+        contracts: {
+            nft: import.meta.env.NG_APP_NFT_CONTRACT_BASE_TESTNET,
+            creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_BASE_TESTNET,
+            tipper: import.meta.env.NG_APP_TIPPER_CONTRACT_BASE_TESTNET,
+        },
+        alchemyBaseUrl: 'https://base-mainnet.g.alchemy.com/v2/',
     },
 };

@@ -1,6 +1,6 @@
 <div class="top-bar">
     <div>
-        <img src="/favicon.svg" width="32" height="32" alt="Logo" title="Tipperoo">
+        <img src="/favicon.svg" width="32" height="32" alt="Logo" title="Tipperoo" />
         <h1>Tipperoo</h1>
     </div>
 
@@ -8,6 +8,7 @@
     @let accountId = accountId$ | async;
     @let balances = balances$ | async;
     @let connected = connected$ | async;
+    @let chainId = chainId$ | async;
 
     @if (connected === true) {
         <app-asset-summary
@@ -17,9 +18,17 @@
             [eth]="(balances ?? { credits: 0, eth: 0 }).eth"
         >
         </app-asset-summary>
-    }
 
-    <a href="https://portal.scroll.io/bridge">Bridge ETH to Scroll</a>
+        @if (chainId === chainIds.SCROLL) {
+            <a href="https://portal.scroll.io/bridge">Bridge ETH to Scroll</a>
+        } @else if (chainId === chainIds.SCROLL_SEPOLIA) {
+            <a href="https://portal-sepolia.scroll.io/bridge">Bridge ETH to Scroll</a>
+        } @else if (chainId === chainIds.BASE_SEPOLIA) {
+            <a href="https://superbridge.app/base-sepolia">Bridge ETH to Base</a>
+        } @else if (chainId === chainIds.BASE) {
+            <a href="https://www.brid.gg/base?originChainId=1&token=ETH">Bridge ETH to Base</a>
+        }
+    }
 
     <app-connect-wallet></app-connect-wallet>
 </div>

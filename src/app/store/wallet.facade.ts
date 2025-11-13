@@ -43,15 +43,8 @@ export class WalletFacade {
         this._store.dispatch(WalletActions.disconnect());
     }
 
-    async switchNetwork() {
-        let chainId = await firstValueFrom(this.getChainId());
-        if (chainId === NetworkConstants.SCROLL_SEPOLIA) {
-            chainId = NetworkConstants.SCROLL;
-            this._store.dispatch(WalletActions.changeChain({ chainId }));
-        } else {
-            chainId = NetworkConstants.SCROLL_SEPOLIA;
-            this._store.dispatch(WalletActions.changeChain({ chainId }));
-        }
+    switchNetwork(chainId: string) {
+        this._store.dispatch(WalletActions.changeChain({ chainId }));
     }
 
     // todo: move contract interaction to svc

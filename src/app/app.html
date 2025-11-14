@@ -14,7 +14,7 @@
                     </div>
                 </div>
             </div>
-            <div ngbAccordionItem>
+            <div ngbAccordionItem [collapsed]="false">
                 <h2 ngbAccordionHeader>
                     <button ngbAccordionButton>Send Tips</button>
                 </h2>
@@ -25,5 +25,13 @@
                 </div>
             </div>
         </div>
+    </div>
+} @else {
+    <div class="welcome">
+        <p>
+            Welcome!
+            <br />
+            Connect your wallet to get started!
+        </p>
     </div>
 }

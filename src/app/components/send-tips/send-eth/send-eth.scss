@@ -17,6 +17,16 @@ div:only-child {
             font-weight: 700;
             font-variant-caps: all-small-caps;
         }
+
+        div {
+            display: block;
+            padding-top: 10%;
+
+            p {
+                font-size: 6pt;
+                text-align: center;
+            }
+        }
     }
 
     div:last-child {

@@ -170,6 +170,37 @@ export class WalletFacade {
         });
     }
 
+    // todo: move contract interaction to svc
+    async sendEthereum(amount: number, to: number) {
+        const chainId = await firstValueFrom(this.getChainId());
+
+        const txHash = await firstValueFrom(
+            this._mm.transact(
+                'SendTipRaw(uint256)',
+                [
+                    {
+                        arg: to,
+                    },
+                ],
+                getNetwork(chainId).contracts.tipper,
+                this._mm.getActiveAccount(),
+                BigInt(Math.floor(amount * 1e18)),
+            ),
+        );
+
+        this._store.dispatch(WalletActions.changesPending({ what: ChangeConstants.SEND_ETHEREUM }));
+
+        let sub = this._mm.receipt(txHash).subscribe((result) => {
+            if (result !== undefined && result !== null) {
+                if (result.status === '0x1') {
+                    this._updateBalances()
+                        .then(() => this._store.dispatch(WalletActions.clearPendingChanges()))
+                        .then(() => sub.unsubscribe());
+                }
+            }
+        });
+    }
+
     private async _updateBalances() {
         const chainId = await firstValueFrom(this.getChainId());
         const activeAcct = this._mm.getActiveAccount();

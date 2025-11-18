@@ -43,38 +43,7 @@
         }
     </button>
     <div ngbDropdownMenu aria-labelledby="ChainList_Picker">
-        <button
-            #scroll
-            ngbDropdownItem
-            [attr.data-chain-id]="chainIds.SCROLL"
-            [disabled]="scroll.dataset['chainId'] === chainId"
-            (click)="clickChain(chainIds.SCROLL)"
-        >
-            <img
-                src="/icons/scroll.svg"
-                width="24"
-                height="24"
-                alt="Scroll Mainnet"
-                title="Scroll Mainnet"
-            />
-            Scroll
-        </button>
-        <button
-            #scrollSepolia
-            ngbDropdownItem
-            [attr.data-chain-id]="chainIds.SCROLL_SEPOLIA"
-            [disabled]="scrollSepolia.dataset['chainId'] === chainId"
-            (click)="clickChain(chainIds.SCROLL_SEPOLIA)"
-        >
-            <img
-                src="/icons/scroll-sepolia.svg"
-                width="24"
-                height="24"
-                alt="Scroll Sepolia"
-                title="Scroll Sepolia"
-            />
-            Scroll Sepolia [TEST]
-        </button>
+        <span class="menu-group">Main Networks</span>
         <button
             #base
             ngbDropdownItem
@@ -92,6 +61,23 @@
             Base
         </button>
         <button
+            #scroll
+            ngbDropdownItem
+            [attr.data-chain-id]="chainIds.SCROLL"
+            [disabled]="scroll.dataset['chainId'] === chainId"
+            (click)="clickChain(chainIds.SCROLL)"
+        >
+            <img
+                src="/icons/scroll.svg"
+                width="24"
+                height="24"
+                alt="Scroll Mainnet"
+                title="Scroll Mainnet"
+            />
+            Scroll
+        </button>
+        <span class="menu-group">Test Networks</span>
+        <button
             #baseSepolia
             ngbDropdownItem
             [attr.data-chain-id]="chainIds.BASE_SEPOLIA"
@@ -105,7 +91,23 @@
                 alt="Base Sepolia"
                 title="Base Sepolia"
             />
-            Base Sepolia [TEST]
+            Base Sepolia
+        </button>
+        <button
+            #scrollSepolia
+            ngbDropdownItem
+            [attr.data-chain-id]="chainIds.SCROLL_SEPOLIA"
+            [disabled]="scrollSepolia.dataset['chainId'] === chainId"
+            (click)="clickChain(chainIds.SCROLL_SEPOLIA)"
+        >
+            <img
+                src="/icons/scroll-sepolia.svg"
+                width="24"
+                height="24"
+                alt="Scroll Sepolia"
+                title="Scroll Sepolia"
+            />
+            Scroll Sepolia
         </button>
     </div>
 </div>

@@ -77,9 +77,9 @@ export const NETWORKS = {
         },
         blockExplorerUrls: ['https://basescan.org/'],
         contracts: {
-            nft: import.meta.env.NG_APP_NFT_CONTRACT_BASE_TESTNET,
-            creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_BASE_TESTNET,
-            tipper: import.meta.env.NG_APP_TIPPER_CONTRACT_BASE_TESTNET,
+            nft: import.meta.env.NG_APP_NFT_CONTRACT_BASE,
+            creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_BASE,
+            tipper: import.meta.env.NG_APP_TIPPER_CONTRACT_BASE,
         },
         alchemyBaseUrl: 'https://base-mainnet.g.alchemy.com/v2/',
     },

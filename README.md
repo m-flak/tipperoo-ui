@@ -1,6 +1,16 @@
-# TipperooUi
+# Tipperoo UI
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.8.
+The frontend portion of the Tippero dApp. 
+
+For the backend portion, [please refer to the Contracts repository](https://github.com/m-flak/tipperoo-contracts).
+
+## Getting Started
+
+Create a `.env.local` file. This file will contain your API keys for Infura and Alchemy.
+```
+NG_APP_INFURA_API_KEY=myApiKey
+NG_APP_ALCHEMY_API_KEY=myApiKey
+```
 
 ## Development server
 

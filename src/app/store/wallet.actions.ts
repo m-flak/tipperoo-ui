@@ -1,8 +1,10 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { EIP6963Info } from './wallet.types';
 
 export const WalletActions = createActionGroup({
     source: 'Wallet',
     events: {
+        'Add Wallet Provider': props<{ info: EIP6963Info }>(),
         Connect: emptyProps(),
         'Connect Success': props<{ accounts: string[]; chainId: string }>(),
         Disconnect: emptyProps(),

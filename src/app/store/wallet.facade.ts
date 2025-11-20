@@ -8,6 +8,7 @@ import {
     selectNftAccountId,
     selectBalances,
     selectChangeIsPending,
+    selectWalletProviders,
 } from './wallet.selectors';
 import { catchError, filter, firstValueFrom, Observable, of } from 'rxjs';
 import { WalletActions } from './wallet.actions';
@@ -16,6 +17,7 @@ import { NetworkConstants } from '../blockchain/networks.constants';
 import { ChangeConstants } from './changes.constants';
 import { CreditsManagerService } from '../blockchain/contracts/credits-manager.service';
 import { NftService } from '../blockchain/contracts/nft.service';
+import { EIP6963Info } from './wallet.types';
 
 @Injectable({
     providedIn: 'root',
@@ -28,12 +30,17 @@ export class WalletFacade {
 
     constructor() {}
 
+    getWalletProviders = () => this._store.select(selectWalletProviders);
     getIsConnected = () => this._store.select(selectIsConnected);
     getAccounts = () => this._store.select(selectAccounts);
     getChainId = () => this._store.select(selectChainId);
     getNftAccountId = () => this._store.select(selectNftAccountId);
     getBalances = () => this._store.select(selectBalances);
     getChangePending = (what: string) => this._store.select(selectChangeIsPending(what));
+
+    addWalletProvider(info: EIP6963Info) {
+        this._store.dispatch(WalletActions.addWalletProvider({ info }));
+    }
 
     async connectWallet() {
         this._store.dispatch(WalletActions.connect());

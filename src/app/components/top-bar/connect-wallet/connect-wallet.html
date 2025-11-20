@@ -1,8 +1,41 @@
+@let walletProviders = walletProviders$ | async;
+
+<ng-template #chooseWallet let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Choose Your Wallet</h4>
+        <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+        ></button>
+    </div>
+    <div class="modal-body">
+        @if (walletProviders?.length === 0) {
+            <span>No Supported Wallets Detected&hellip;</span>
+        } @else {
+            <div class="list-group">
+                @for (provider of walletProviders; track provider.uuid) {
+                    <button
+                        type="button"
+                        class="list-group-item list-group-item-action"
+                        (click)="connect(); modal.dismiss('Wallet click')"
+                    >
+                        <img [src]="provider.icon" [alt]="provider.name" [title]="provider.name" />
+                        &nbsp;
+                        {{ provider.name }}
+                    </button>
+                }
+            </div>
+        }
+    </div>
+</ng-template>
+
 @let isConnected = connected$ | async;
 
 <div class="connect-wallet-bar">
     @if (!isConnected) {
-        <button (click)="connect()">Connect Wallet</button>
+        <button (click)="openModal(chooseWallet)">Connect Wallet</button>
     } @else {
         @let accounts = accounts$ | async;
         <select id="ConnectWalletBar_Accounts">

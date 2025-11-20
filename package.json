@@ -32,6 +32,7 @@
     "@angular/forms": "^20.3.0",
     "@angular/platform-browser": "^20.3.0",
     "@angular/router": "^20.3.0",
+    "@metamask/providers": "^16.1.0",
     "@metamask/sdk": "^0.33.1",
     "@ng-bootstrap/ng-bootstrap": "^19.0.1",
     "@ngrx/effects": "^20.1.0",

@@ -44,3 +44,4 @@ Thumbs.db
 
 #sensitive s***
 .env.local
+.env.production

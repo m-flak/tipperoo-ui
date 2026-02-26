@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { MetaMaskService } from '../metamask/metamask.service';
+import { MetaMaskService } from '../wallets/metamask.service';
 import {
     selectIsConnected,
     selectAccounts,

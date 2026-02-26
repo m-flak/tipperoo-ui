@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { MetaMaskService } from '../../metamask/metamask.service';
+import { MetaMaskService } from '../../wallets/metamask.service';
 import { catchError, map, Observable, of } from 'rxjs';
 import { getNetwork } from '../networks';
-import { stripZeroX } from '../../metamask/metamask.utils';
+import { stripZeroX } from '../../wallets/metamask.utils';
 
 @Injectable({
     providedIn: 'root',

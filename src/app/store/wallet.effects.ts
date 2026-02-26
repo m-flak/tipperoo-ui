@@ -2,7 +2,7 @@ import { filter, map, of, switchMap } from 'rxjs';
 import { inject } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { WalletActions } from './wallet.actions';
-import { MetaMaskService } from '../metamask/metamask.service';
+import { MetaMaskService } from '../wallets/metamask.service';
 import { NetworkConstants } from '../blockchain/networks.constants';
 import { CreditsManagerService } from '../blockchain/contracts/credits-manager.service';
 import { NftService } from '../blockchain/contracts/nft.service';

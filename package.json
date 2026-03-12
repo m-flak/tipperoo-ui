@@ -41,6 +41,7 @@
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.6",
     "buffer": "^6.0.3",
+    "eip1193-types": "^0.2.2",
     "keccak256": "^1.0.6",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"

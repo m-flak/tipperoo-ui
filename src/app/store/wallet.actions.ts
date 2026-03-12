@@ -5,7 +5,7 @@ export const WalletActions = createActionGroup({
     source: 'Wallet',
     events: {
         'Add Wallet Provider': props<{ info: EIP6963Info }>(),
-        Connect: emptyProps(),
+        Connect: props<{providerName: string}>(),
         'Connect Success': props<{ accounts: string[]; chainId: string }>(),
         Disconnect: emptyProps(),
         'Change Chain': props<{ chainId: string }>(),

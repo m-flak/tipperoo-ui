@@ -19,7 +19,7 @@
                     <button
                         type="button"
                         class="list-group-item list-group-item-action"
-                        (click)="connect(); modal.dismiss('Wallet click')"
+                        (click)="connect(provider.name); modal.dismiss('Wallet click')"
                     >
                         <img [src]="provider.icon" [alt]="provider.name" [title]="provider.name" />
                         &nbsp;

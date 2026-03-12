@@ -42,8 +42,8 @@ export class WalletFacade {
         this._store.dispatch(WalletActions.addWalletProvider({ info }));
     }
 
-    async connectWallet() {
-        this._store.dispatch(WalletActions.connect());
+    async connectWallet(providerName: string) {
+        this._store.dispatch(WalletActions.connect({ providerName }));
     }
 
     disconnectWallet() {

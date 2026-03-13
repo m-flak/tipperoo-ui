@@ -29,11 +29,11 @@ export class MetaMaskService extends AbstractWalletService {
         super();
     }
 
-    get connected() {
+    override get connected() {
         return this._ethereum !== undefined;
     }
 
-    getActiveAccount(prefix: boolean = true): string {
+    override getActiveAccount(prefix: boolean = true): string {
         let addr = this._ethereum?.getSelectedAddress();
 
         if (!addr) {
@@ -45,19 +45,20 @@ export class MetaMaskService extends AbstractWalletService {
         return addr;
     }
 
-    connectWallet(): Observable<string[]> {
+    override connectWallet(): Observable<string[]> {
         return from(this._mm.connect()).pipe(
             tap(() => {
                 this._ethereum = this._mm.getProvider();
-                this.ethereum = (<any>window).ethereum;
+                this.ethereum = <any>this._ethereum;
             }),
         );
     }
 
-    disconnectWallet(): Observable<void> {
+    override disconnectWallet(): Observable<void> {
         return from(this._mm.terminate()).pipe(
             tap(() => {
                 this._ethereum = undefined;
+                this.ethereum = undefined;
             }),
         );
     }

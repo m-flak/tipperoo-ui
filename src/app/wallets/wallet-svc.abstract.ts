@@ -12,6 +12,8 @@ export abstract class AbstractWalletService {
         this.ethereum = ethereum;
     }
 
+    abstract get connected(): boolean;
+
     abstract getActiveAccount(): string;
 
     abstract connectWallet(): Observable<string[]>;

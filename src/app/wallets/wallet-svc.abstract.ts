@@ -1,8 +1,18 @@
-import { Observable, throwError, from, filter, map, catchError, timer, switchMap, takeWhile } from "rxjs";
-import { getNetwork } from "../blockchain/networks";
-import { fnAbi, hexStr } from "./metamask.utils";
-import { EIP1193Provider } from "eip1193-types";
-import { CallArg, IWalletService } from "./wallet-svc.interface";
+import {
+    Observable,
+    throwError,
+    from,
+    filter,
+    map,
+    catchError,
+    timer,
+    switchMap,
+    takeWhile,
+} from 'rxjs';
+import { getNetwork } from '../blockchain/networks';
+import { fnAbi, hexStr } from './metamask.utils';
+import { EIP1193Provider } from 'eip1193-types';
+import { CallArg, IWalletService } from './wallet-svc.interface';
 
 declare type Maybe<Type> = Partial<Type> | null | undefined;
 
@@ -88,12 +98,7 @@ export abstract class AbstractWalletService implements IWalletService {
         );
     }
 
-    call(
-        method: string,
-        args: CallArg[],
-        to: string,
-        sender?: string,
-    ): Observable<string> {
+    call(method: string, args: CallArg[], to: string, sender?: string): Observable<string> {
         if (!this.ethereum) {
             return throwError(() => new Error('No ethereum provider'));
         }

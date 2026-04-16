@@ -1,6 +1,6 @@
-import { from, map, Observable, tap, throwError } from "rxjs";
-import { AbstractWalletService } from "./wallet-svc.abstract";
-import { Injectable } from "@angular/core";
+import { from, map, Observable, tap, throwError } from 'rxjs';
+import { AbstractWalletService } from './wallet-svc.abstract';
+import { Injectable } from '@angular/core';
 
 @Injectable({
     providedIn: 'root',
@@ -15,7 +15,8 @@ export class GenericWalletService extends AbstractWalletService {
             return '';
         }
 
-        const addr = (<any>this.ethereum)?.selectedAddress || (<any>this.ethereum)?.getSelectedAddress();
+        const addr =
+            (<any>this.ethereum)?.selectedAddress || (<any>this.ethereum)?.getSelectedAddress();
         return addr || '';
     }
 
@@ -25,13 +26,13 @@ export class GenericWalletService extends AbstractWalletService {
         }
 
         return from(
-                    this.ethereum.request({
-                        method: 'eth_requestAccounts',
-                    }),
-                ).pipe(
-                    map((accounts) => <string[]>accounts),
-                    tap(() => this.isConnected = true),
-                );
+            this.ethereum.request({
+                method: 'eth_requestAccounts',
+            }),
+        ).pipe(
+            map((accounts) => <string[]>accounts),
+            tap(() => (this.isConnected = true)),
+        );
     }
 
     override disconnectWallet(): Observable<void> {
@@ -41,5 +42,4 @@ export class GenericWalletService extends AbstractWalletService {
             subscriber.complete();
         });
     }
-    
 }

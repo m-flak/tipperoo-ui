@@ -21,7 +21,9 @@ export const uponConnect = createEffect(
                         provider.getChainId().pipe(map((chainId) => ({ accounts, chainId }))),
                     ),
                     filter(() => provider.connected),
-                    map(({ accounts, chainId }) => WalletActions.connectSuccess({ accounts, chainId })),
+                    map(({ accounts, chainId }) =>
+                        WalletActions.connectSuccess({ accounts, chainId }),
+                    ),
                 );
             }),
         ),
@@ -53,7 +55,9 @@ export const uponChangeChain = createEffect(
         actions$.pipe(
             ofType(WalletActions.changeChain),
             concatLatestFrom(() => store.select(walletFeature.selectWallet)),
-            switchMap(([{ chainId }, wallet]) => walletSvc.getWalletProvider(wallet).changeChain(chainId)),
+            switchMap(([{ chainId }, wallet]) =>
+                walletSvc.getWalletProvider(wallet).changeChain(chainId),
+            ),
             map((chainId) => WalletActions.changeChainSuccess({ chainId })),
         ),
     { functional: true, dispatch: true },
@@ -71,11 +75,15 @@ export const uponChangeChainSuccessSetBalances = createEffect(
             concatLatestFrom(() => store.select(walletFeature.selectWallet)),
             switchMap(([{ chainId }, wallet]) => {
                 const provider = walletSvc.getWalletProvider(wallet);
-                return creditsMgr.balanceOf(provider.getActiveAccount(), chainId).pipe(
-                    switchMap((credits) =>
-                        provider.getBalance(provider.getActiveAccount()).pipe(map((eth) => ({ credits, eth }))),
-                    ),
-                );
+                return creditsMgr
+                    .balanceOf(provider.getActiveAccount(), chainId)
+                    .pipe(
+                        switchMap((credits) =>
+                            provider
+                                .getBalance(provider.getActiveAccount())
+                                .pipe(map((eth) => ({ credits, eth }))),
+                        ),
+                    );
             }),
             map((creditsEth) => WalletActions.setBalances(creditsEth)),
         ),
@@ -83,7 +91,12 @@ export const uponChangeChainSuccessSetBalances = createEffect(
 );
 
 export const uponChangeChainSuccessUpdateNftData = createEffect(
-    (actions$ = inject(Actions), walletSvc = inject(WalletService), store = inject(Store), nft = inject(NftService)) =>
+    (
+        actions$ = inject(Actions),
+        walletSvc = inject(WalletService),
+        store = inject(Store),
+        nft = inject(NftService),
+    ) =>
         actions$.pipe(
             ofType(WalletActions.changeChainSuccess),
             concatLatestFrom(() => store.select(walletFeature.selectWallet)),

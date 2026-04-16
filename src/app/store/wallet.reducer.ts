@@ -5,6 +5,7 @@ import { EIP6963Info } from './wallet.types';
 export interface WalletState {
     pendingChanges: string | null;
 
+    wallet: string;
     wallets: EIP6963Info[];
 
     connected: boolean;
@@ -20,6 +21,7 @@ export interface WalletState {
 export const walletState: WalletState = {
     pendingChanges: null,
 
+    wallet: '',
     wallets: [],
 
     connected: false,
@@ -44,6 +46,10 @@ export const walletReducer = createReducer(
         // wallet info already present, change nothing
         return state;
     }),
+    on(WalletActions.connect, (state, { providerName }) => ({
+        ...state,
+        wallet: providerName,
+    })),
     on(WalletActions.connectSuccess, (state, { accounts, chainId }) => ({
         ...state,
         connected: true,
@@ -58,6 +64,7 @@ export const walletReducer = createReducer(
         nftId: 0,
         balanceCredits: 0,
         balanceEth: 0,
+        wallet: '',
     })),
     on(WalletActions.changeChain, WalletActions.changeChainSuccess, (state, { chainId }) => ({
         ...state,

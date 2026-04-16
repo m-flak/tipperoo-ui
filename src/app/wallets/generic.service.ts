@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { from, map, Observable, tap, throwError } from "rxjs";
 import { AbstractWalletService } from "./wallet-svc.abstract";
 import { Injectable } from "@angular/core";
 
@@ -6,26 +6,40 @@ import { Injectable } from "@angular/core";
     providedIn: 'root',
 })
 export class GenericWalletService extends AbstractWalletService {
-    private _connected = false;
-
     constructor() {
         super((<any>window).ethereum);
     }
 
-    override get connected(): boolean {
-       return this._connected;
-    }
-
     override getActiveAccount(): string {
-        throw new Error("Method not implemented.");
+        if (!this.ethereum) {
+            return '';
+        }
+
+        const addr = (<any>this.ethereum)?.selectedAddress || (<any>this.ethereum)?.getSelectedAddress();
+        return addr || '';
     }
 
     override connectWallet(): Observable<string[]> {
-        throw new Error("Method not implemented.");
+        if (!this.ethereum) {
+            return throwError(() => new Error('No ethereum provider'));
+        }
+
+        return from(
+                    this.ethereum.request({
+                        method: 'eth_requestAccounts',
+                    }),
+                ).pipe(
+                    map((accounts) => <string[]>accounts),
+                    tap(() => this.isConnected = true),
+                );
     }
 
     override disconnectWallet(): Observable<void> {
-        throw new Error("Method not implemented.");
+        return new Observable<void>((subscriber) => {
+            this.isConnected = false;
+            subscriber.next();
+            subscriber.complete();
+        });
     }
     
 }

@@ -2,17 +2,21 @@ import { Observable, throwError, from, filter, map, catchError, timer, switchMap
 import { getNetwork } from "../blockchain/networks";
 import { fnAbi, hexStr } from "./metamask.utils";
 import { EIP1193Provider } from "eip1193-types";
+import { CallArg, IWalletService } from "./wallet-svc.interface";
 
 declare type Maybe<Type> = Partial<Type> | null | undefined;
 
-export abstract class AbstractWalletService {
+export abstract class AbstractWalletService implements IWalletService {
     protected ethereum: EIP1193Provider | undefined;
+    protected isConnected = false;
 
     constructor(ethereum?: EIP1193Provider) {
         this.ethereum = ethereum;
     }
 
-    abstract get connected(): boolean;
+    get connected(): boolean {
+        return this.isConnected;
+    }
 
     abstract getActiveAccount(): string;
 
@@ -86,7 +90,7 @@ export abstract class AbstractWalletService {
 
     call(
         method: string,
-        args: { arg: string | number; bytes?: number; encode?: boolean }[],
+        args: CallArg[],
         to: string,
         sender?: string,
     ): Observable<string> {
@@ -118,7 +122,7 @@ export abstract class AbstractWalletService {
 
     transact(
         method: string,
-        args: { arg: string | number; bytes?: number; encode?: boolean }[],
+        args: CallArg[],
         to: string,
         sender: string,
         value?: bigint,

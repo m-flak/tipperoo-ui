@@ -36,6 +36,7 @@
     "@metamask/sdk": "^0.33.1",
     "@ng-bootstrap/ng-bootstrap": "^19.0.1",
     "@ngrx/effects": "^20.1.0",
+    "@ngrx/operators": "^20.1.0",
     "@ngrx/store": "^20.1.0",
     "@ngrx/store-devtools": "^20.1.0",
     "@popperjs/core": "^2.11.8",

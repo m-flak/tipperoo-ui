@@ -1,8 +1,12 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { WalletActions } from './wallet.actions';
+import { EIP6963Info } from './wallet.types';
 
 export interface WalletState {
     pendingChanges: string | null;
+
+    wallet: string;
+    wallets: EIP6963Info[];
 
     connected: boolean;
     chainId: string;
@@ -17,6 +21,9 @@ export interface WalletState {
 export const walletState: WalletState = {
     pendingChanges: null,
 
+    wallet: '',
+    wallets: [],
+
     connected: false,
     chainId: '0x0',
 
@@ -29,6 +36,20 @@ export const walletState: WalletState = {
 
 export const walletReducer = createReducer(
     walletState,
+    on(WalletActions.addWalletProvider, (state, { info }) => {
+        if (!state.wallets.find((w) => w.uuid === info.uuid)) {
+            return {
+                ...state,
+                wallets: [...state.wallets, info],
+            };
+        }
+        // wallet info already present, change nothing
+        return state;
+    }),
+    on(WalletActions.connect, (state, { providerName }) => ({
+        ...state,
+        wallet: providerName,
+    })),
     on(WalletActions.connectSuccess, (state, { accounts, chainId }) => ({
         ...state,
         connected: true,
@@ -43,6 +64,7 @@ export const walletReducer = createReducer(
         nftId: 0,
         balanceCredits: 0,
         balanceEth: 0,
+        wallet: '',
     })),
     on(WalletActions.changeChain, WalletActions.changeChainSuccess, (state, { chainId }) => ({
         ...state,

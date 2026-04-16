@@ -1,83 +1,49 @@
-import { Inject, Injectable } from '@angular/core';
-import { METAMASK } from './metamask.provider';
-import MetaMaskSDK, { SDKProvider } from '@metamask/sdk';
-import {
-    catchError,
-    exhaustMap,
-    filter,
-    from,
-    map,
-    Observable,
-    switchMap,
-    takeUntil,
-    takeWhile,
-    tap,
-    throwError,
-    timer,
-} from 'rxjs';
-import { getNetwork } from '../blockchain/networks';
-import { fnAbi, hexStr } from './metamask.utils';
+import { Observable, throwError, from, filter, map, catchError, timer, switchMap, takeWhile } from "rxjs";
+import { getNetwork } from "../blockchain/networks";
+import { fnAbi, hexStr } from "./metamask.utils";
+import { EIP1193Provider } from "eip1193-types";
+import { CallArg, IWalletService } from "./wallet-svc.interface";
 
-@Injectable({
-    providedIn: 'root',
-})
-export class MetaMaskService {
-    private _ethereum: SDKProvider | undefined = undefined;
+declare type Maybe<Type> = Partial<Type> | null | undefined;
 
-    constructor(@Inject(METAMASK) private _mm: MetaMaskSDK) {}
+export abstract class AbstractWalletService implements IWalletService {
+    protected ethereum: EIP1193Provider | undefined;
+    protected isConnected = false;
 
-    get connected() {
-        return this._ethereum !== undefined;
+    constructor(ethereum?: EIP1193Provider) {
+        this.ethereum = ethereum;
     }
 
-    getActiveAccount(prefix: boolean = true): string {
-        let addr = this._ethereum?.getSelectedAddress();
-
-        if (!addr) {
-            addr = hexStr(0, true, 40, prefix ? '0x' : '');
-        } else if (!prefix) {
-            addr = addr.replace('0x', '');
-        }
-
-        return addr;
+    get connected(): boolean {
+        return this.isConnected;
     }
 
-    connectWallet(): Observable<string[]> {
-        return from(this._mm.connect()).pipe(
-            tap(() => {
-                this._ethereum = this._mm.getProvider();
-            }),
-        );
-    }
+    abstract getActiveAccount(): string;
 
-    disconnectWallet(): Observable<void> {
-        return from(this._mm.terminate()).pipe(
-            tap(() => {
-                this._ethereum = undefined;
-            }),
-        );
-    }
+    abstract connectWallet(): Observable<string[]>;
+
+    abstract disconnectWallet(): Observable<void>;
 
     getChainId(): Observable<string> {
-        if (!this._ethereum) {
+        if (!this.ethereum) {
             return throwError(() => new Error('No ethereum provider'));
         }
 
-        return from(this._ethereum.request({ method: 'eth_chainId' })).pipe(
+        return from(this.ethereum.request({ method: 'eth_chainId' })).pipe(
             filter((result) => result !== null || result !== undefined),
             map((result) => `${result}`),
         );
     }
 
     changeChain(chainId: string): Observable<string> {
-        if (!this._ethereum) {
+        if (!this.ethereum) {
             return throwError(() => new Error('No ethereum provider'));
         }
 
         const network = getNetwork(chainId);
 
         return from(
-            this._ethereum.request({
+            this.ethereum.request({
                 method: 'wallet_switchEthereumChain',
                 params: [{ chainId }],
             }),
@@ -85,7 +51,7 @@ export class MetaMaskService {
             catchError((err) => {
                 if (err.code === 4902) {
                     return from(
-                        this._ethereum!.request({
+                        this.ethereum!.request({
                             method: 'wallet_addEthereumChain',
                             params: [
                                 {
@@ -106,12 +72,12 @@ export class MetaMaskService {
     }
 
     getBalance(address: string): Observable<number> {
-        if (!this._ethereum) {
+        if (!this.ethereum) {
             return throwError(() => new Error('No ethereum provider'));
         }
 
         return from(
-            this._ethereum.request({
+            this.ethereum.request({
                 method: 'eth_getBalance',
                 params: [address, 'latest'],
             }),
@@ -124,11 +90,11 @@ export class MetaMaskService {
 
     call(
         method: string,
-        args: { arg: string | number; bytes?: number; encode?: boolean }[],
+        args: CallArg[],
         to: string,
         sender?: string,
     ): Observable<string> {
-        if (!this._ethereum) {
+        if (!this.ethereum) {
             return throwError(() => new Error('No ethereum provider'));
         }
 
@@ -141,7 +107,7 @@ export class MetaMaskService {
         }
 
         return from(
-            this._ethereum!.request({
+            this.ethereum!.request({
                 method: 'eth_call',
                 params: [
                     {
@@ -156,12 +122,12 @@ export class MetaMaskService {
 
     transact(
         method: string,
-        args: { arg: string | number; bytes?: number; encode?: boolean }[],
+        args: CallArg[],
         to: string,
         sender: string,
         value?: bigint,
     ): Observable<string> {
-        if (!this._ethereum) {
+        if (!this.ethereum) {
             return throwError(() => new Error('No ethereum provider'));
         }
 
@@ -174,7 +140,7 @@ export class MetaMaskService {
         }
 
         return from(
-            this._ethereum!.request({
+            this.ethereum!.request({
                 method: 'eth_sendTransaction',
                 params: [
                     {
@@ -191,14 +157,14 @@ export class MetaMaskService {
     receipt(
         txHash: string,
     ): Observable<Partial<{ transactionHash: string; status: string }> | null | undefined> {
-        if (!this._ethereum) {
+        if (!this.ethereum) {
             return throwError(() => new Error('No ethereum provider'));
         }
 
         return timer(2000).pipe(
             switchMap(() =>
                 from(
-                    this._ethereum!.request({
+                    <Promise<Maybe<unknown>>>this.ethereum!.request({
                         method: 'eth_getTransactionReceipt',
                         params: [txHash],
                     }),

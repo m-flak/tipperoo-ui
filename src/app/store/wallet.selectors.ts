@@ -3,6 +3,8 @@ import { WalletState } from './wallet.reducer';
 
 export const selectWallet = createFeatureSelector<WalletState>('wallet');
 
+export const selectWalletProviders = createSelector(selectWallet, (state) => state.wallets);
+
 export const selectIsConnected = createSelector(selectWallet, (state) => state.connected);
 
 export const selectAccounts = createSelector(selectWallet, (state) => state.accounts);

@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { MetaMaskService } from '../wallets/metamask.service';
+import { WalletService } from '../wallets/wallet.service';
 import {
     selectIsConnected,
     selectAccounts,
@@ -9,6 +9,7 @@ import {
     selectBalances,
     selectChangeIsPending,
     selectWalletProviders,
+    selectActiveWalletName,
 } from './wallet.selectors';
 import { catchError, filter, firstValueFrom, Observable, of } from 'rxjs';
 import { WalletActions } from './wallet.actions';
@@ -18,13 +19,14 @@ import { ChangeConstants } from './changes.constants';
 import { CreditsManagerService } from '../blockchain/contracts/credits-manager.service';
 import { NftService } from '../blockchain/contracts/nft.service';
 import { EIP6963Info } from './wallet.types';
+import { IWalletService } from '../wallets/wallet-svc.interface';
 
 @Injectable({
     providedIn: 'root',
 })
 export class WalletFacade {
     private _store = inject(Store);
-    private _mm = inject(MetaMaskService);
+    private _walletSvc = inject(WalletService);
     private _creditsMgr = inject(CreditsManagerService);
     private _nft = inject(NftService);
 
@@ -56,24 +58,25 @@ export class WalletFacade {
 
     // todo: move contract interaction to svc
     async createAccount() {
+        const wallet = await this._getActiveWallet();
         const chainId = await firstValueFrom(this.getChainId());
         const txHash = await firstValueFrom(
-            this._mm.transact(
+            wallet.transact(
                 'mintAccountToken(address)',
                 [
                     {
-                        arg: this._mm.getActiveAccount(false),
+                        arg: wallet.getActiveAccount(false),
                         encode: false,
                     },
                 ],
                 getNetwork(chainId).contracts.nft,
-                this._mm.getActiveAccount(),
+                wallet.getActiveAccount(),
             ),
         );
 
         this._store.dispatch(WalletActions.changesPending({ what: ChangeConstants.NEW_ACCOUNT }));
 
-        let sub = this._mm.receipt(txHash).subscribe((result) => {
+        let sub = wallet.receipt(txHash).subscribe((result) => {
             if (result !== undefined && result !== null) {
                 if (result.status === '0x1') {
                     this._updateNftData()
@@ -86,11 +89,12 @@ export class WalletFacade {
 
     // todo: move contract interaction to svc
     async redeemCredits() {
+        const wallet = await this._getActiveWallet();
         const chainId = await firstValueFrom(this.getChainId());
         const accountId = await firstValueFrom(this.getNftAccountId());
 
         const txHash = await firstValueFrom(
-            this._mm.transact(
+            wallet.transact(
                 'cashOutCredits(uint256)',
                 [
                     {
@@ -98,7 +102,7 @@ export class WalletFacade {
                     },
                 ],
                 getNetwork(chainId).contracts.creditsMgr,
-                this._mm.getActiveAccount(),
+                wallet.getActiveAccount(),
             ),
         );
 
@@ -106,7 +110,7 @@ export class WalletFacade {
             WalletActions.changesPending({ what: ChangeConstants.REDEEM_CREDITS }),
         );
 
-        let sub = this._mm.receipt(txHash).subscribe((result) => {
+        let sub = wallet.receipt(txHash).subscribe((result) => {
             if (result !== undefined && result !== null) {
                 if (result.status === '0x1') {
                     this._updateBalances()
@@ -119,16 +123,17 @@ export class WalletFacade {
 
     // todo: move contract interaction to svc
     async buyCredits(amount: number) {
+        const wallet = await this._getActiveWallet();
         const chainId = await firstValueFrom(this.getChainId());
         const { decimals } = getNetwork(chainId).nativeCurrency;
         const factor = 10n ** BigInt(decimals);
 
         const txHash = await firstValueFrom(
-            this._mm.transact(
+            wallet.transact(
                 'depositCredits()',
                 [],
                 getNetwork(chainId).contracts.creditsMgr,
-                this._mm.getActiveAccount(),
+                wallet.getActiveAccount(),
                 BigInt(Math.floor(amount)) * factor +
                     BigInt(Math.round((amount % 1) * Number(factor))),
             ),
@@ -136,7 +141,7 @@ export class WalletFacade {
 
         this._store.dispatch(WalletActions.changesPending({ what: ChangeConstants.BUY_CREDITS }));
 
-        let sub = this._mm.receipt(txHash).subscribe((result) => {
+        let sub = wallet.receipt(txHash).subscribe((result) => {
             if (result !== undefined && result !== null) {
                 if (result.status === '0x1') {
                     this._updateBalances()
@@ -149,10 +154,11 @@ export class WalletFacade {
 
     // todo: move contract interaction to svc
     async sendCredits(amount: number, to: number) {
+        const wallet = await this._getActiveWallet();
         const chainId = await firstValueFrom(this.getChainId());
 
         const txHash = await firstValueFrom(
-            this._mm.transact(
+            wallet.transact(
                 'SendTipCredits(uint256,uint256)',
                 [
                     {
@@ -163,13 +169,13 @@ export class WalletFacade {
                     },
                 ],
                 getNetwork(chainId).contracts.tipper,
-                this._mm.getActiveAccount(),
+                wallet.getActiveAccount(),
             ),
         );
 
         this._store.dispatch(WalletActions.changesPending({ what: ChangeConstants.SEND_CREDITS }));
 
-        let sub = this._mm.receipt(txHash).subscribe((result) => {
+        let sub = wallet.receipt(txHash).subscribe((result) => {
             if (result !== undefined && result !== null) {
                 if (result.status === '0x1') {
                     this._updateBalances()
@@ -182,12 +188,13 @@ export class WalletFacade {
 
     // todo: move contract interaction to svc
     async sendNative(amount: number, to: number) {
+        const wallet = await this._getActiveWallet();
         const chainId = await firstValueFrom(this.getChainId());
         const { decimals } = getNetwork(chainId).nativeCurrency;
         const factor = 10n ** BigInt(decimals);
 
         const txHash = await firstValueFrom(
-            this._mm.transact(
+            wallet.transact(
                 'SendTipRaw(uint256)',
                 [
                     {
@@ -195,7 +202,7 @@ export class WalletFacade {
                     },
                 ],
                 getNetwork(chainId).contracts.tipper,
-                this._mm.getActiveAccount(),
+                wallet.getActiveAccount(),
                 BigInt(Math.floor(amount)) * factor +
                     BigInt(Math.round((amount % 1) * Number(factor))),
             ),
@@ -203,7 +210,7 @@ export class WalletFacade {
 
         this._store.dispatch(WalletActions.changesPending({ what: ChangeConstants.SEND_NATIVE }));
 
-        let sub = this._mm.receipt(txHash).subscribe((result) => {
+        let sub = wallet.receipt(txHash).subscribe((result) => {
             if (result !== undefined && result !== null) {
                 if (result.status === '0x1') {
                     this._updateBalances()
@@ -214,29 +221,34 @@ export class WalletFacade {
         });
     }
 
+    private async _getActiveWallet(): Promise<IWalletService> {
+        const name = await firstValueFrom(this._store.select(selectActiveWalletName));
+        return this._walletSvc.getWalletProvider(name);
+    }
+
     private async _updateBalances() {
+        const wallet = await this._getActiveWallet();
         const chainId = await firstValueFrom(this.getChainId());
-        const activeAcct = this._mm.getActiveAccount();
+        const activeAcct = wallet.getActiveAccount();
 
-        const native = await firstValueFrom(this._mm.getBalance(activeAcct, chainId));
+        const native = await firstValueFrom(wallet.getBalance(activeAcct, chainId));
 
-        const credits = await firstValueFrom(this._creditsMgr.balanceOf(activeAcct, chainId));
+        const credits = await firstValueFrom(this._creditsMgr.balanceOf(wallet,activeAcct, chainId));
 
         this._store.dispatch(WalletActions.setBalances({ credits, native }));
     }
 
     private async _updateNftData() {
+        const wallet = await this._getActiveWallet();
         const chainId = await firstValueFrom(this.getChainId());
+        const activeAcct = wallet.getActiveAccount();
 
-        const balance = await firstValueFrom(
-            this._nft.balanceOf(this._mm.getActiveAccount(), chainId),
-        );
+        const balance = await firstValueFrom(this._nft.balanceOf(wallet, activeAcct, chainId));
 
         if (balance > 0) {
             const tokenId = await firstValueFrom(
-                this._nft.getAccountTokenId(this._mm.getActiveAccount(), chainId),
+                this._nft.getAccountTokenId(wallet, activeAcct, chainId),
             );
-
             this._store.dispatch(WalletActions.setAccountNft({ nftId: tokenId }));
         } else {
             this._store.dispatch(WalletActions.setAccountNft({ nftId: 0 }));

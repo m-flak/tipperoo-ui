@@ -10,19 +10,32 @@ export class GenericWalletService extends AbstractWalletService {
         super((<any>window).ethereum);
     }
 
-    override getActiveAccount(): string {
+    override getActiveAccount(prefix?: boolean): string {
         if (!this.ethereum) {
-            return '';
+            this.ethereum = (<any>window).ethereum;
+
+            if (!this.ethereum) {
+                return '';
+            }
         }
 
         const addr =
             (<any>this.ethereum)?.selectedAddress || (<any>this.ethereum)?.getSelectedAddress();
+
+        if (prefix === false && addr) {
+            return addr.replace('0x', '');
+        }
+
         return addr || '';
     }
 
     override connectWallet(): Observable<string[]> {
         if (!this.ethereum) {
-            return throwError(() => new Error('No ethereum provider'));
+            this.ethereum = (<any>window).ethereum;
+
+            if (!this.ethereum) {
+                return throwError(() => new Error('No ethereum provider'));
+            }
         }
 
         return from(

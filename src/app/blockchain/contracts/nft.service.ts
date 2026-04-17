@@ -1,5 +1,5 @@
-import { inject, Injectable } from '@angular/core';
-import { MetaMaskService } from '../../wallets/metamask.service';
+import { Injectable } from '@angular/core';
+import { IWalletService } from '../../wallets/wallet-svc.interface';
 import { catchError, map, Observable, of } from 'rxjs';
 import { getNetwork } from '../networks';
 import { stripZeroX } from '../../wallets/metamask.utils';
@@ -8,10 +8,8 @@ import { stripZeroX } from '../../wallets/metamask.utils';
     providedIn: 'root',
 })
 export class NftService {
-    private _mm = inject(MetaMaskService);
-
-    balanceOf(account: string, chainId: string): Observable<number> {
-        return this._mm
+    balanceOf(wallet: IWalletService, account: string, chainId: string): Observable<number> {
+        return wallet
             .call(
                 'balanceOf(address)',
                 [
@@ -28,8 +26,8 @@ export class NftService {
             );
     }
 
-    getAccountTokenId(account: string, chainId: string): Observable<number> {
-        return this._mm
+    getAccountTokenId(wallet: IWalletService, account: string, chainId: string): Observable<number> {
+        return wallet
             .call(
                 'getAccountTokenId(address)',
                 [

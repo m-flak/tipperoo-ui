@@ -33,12 +33,12 @@ export class MetaMaskService extends AbstractWalletService {
         return this._ethereum !== undefined;
     }
 
-    override getActiveAccount(prefix: boolean = true): string {
+    override getActiveAccount(prefix?: boolean): string {
         let addr = this._ethereum?.getSelectedAddress();
 
         if (!addr) {
             addr = hexStr(0, true, 40, prefix ? '0x' : '');
-        } else if (!prefix) {
+        } else if (prefix === false) {
             addr = addr.replace('0x', '');
         }
 

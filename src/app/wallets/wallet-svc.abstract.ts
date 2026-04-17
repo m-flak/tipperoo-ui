@@ -81,10 +81,14 @@ export abstract class AbstractWalletService implements IWalletService {
         );
     }
 
-    getBalance(address: string): Observable<number> {
+    getBalance(address: string, chainId: string): Observable<number> {
         if (!this.ethereum) {
             return throwError(() => new Error('No ethereum provider'));
         }
+
+        const { decimals } = getNetwork(chainId).nativeCurrency;
+        const factorBig = 10n ** BigInt(decimals);
+        const factor = Number(factorBig);
 
         return from(
             this.ethereum.request({
@@ -94,7 +98,7 @@ export abstract class AbstractWalletService implements IWalletService {
         ).pipe(
             filter((n) => n !== null),
             map((n) => BigInt(<string>n)),
-            map((big) => Number((big / 1n ** 18n).toString()) / 1e18),
+            map((big) => Number(big / factorBig) + Number(big % factorBig) / factor),
         );
     }
 

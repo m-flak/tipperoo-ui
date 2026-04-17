@@ -1,8 +1,8 @@
 <div class="send-tips">
     @let creditsBalance = creditsBalance$ | async;
     @let creditsSending = creditsSending$ | async;
-    @let ethBalance = ethBalance$ | async;
-    @let ethSending = ethSending$ | async;
+    @let nativeBalance = nativeBalance$ | async;
+    @let nativeSending = nativeSending$ | async;
 
     <div class="tip-picker">
         <span>Choose the type of tip you wish to send:</span>
@@ -35,9 +35,9 @@
         ></app-send-credits>
     } @else if (pickedTips === 'ethereum') {
         <app-send-eth
-            [totalBalance]="ethBalance ?? 0"
-            [disable]="ethSending ?? false"
-            (send)="sendEthereum($event)"
+            [totalBalance]="nativeBalance ?? 0"
+            [disable]="nativeSending ?? false"
+            (send)="sendNative($event)"
         ></app-send-eth>
     }
 

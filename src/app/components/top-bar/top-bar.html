@@ -14,8 +14,8 @@
         <app-asset-summary
             [hasAccount]="hasAccount ?? false"
             [accountId]="accountId ?? 0"
-            [credits]="(balances ?? { credits: 0, eth: 0 }).credits"
-            [eth]="(balances ?? { credits: 0, eth: 0 }).eth"
+            [credits]="(balances ?? { credits: 0, native: 0 }).credits"
+            [nativeBalance]="(balances ?? { credits: 0, native: 0 }).native"
         >
         </app-asset-summary>
 

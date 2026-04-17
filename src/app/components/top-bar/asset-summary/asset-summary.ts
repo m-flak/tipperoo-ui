@@ -17,5 +17,5 @@ export class AssetSummary {
     credits = 0;
 
     @Input()
-    eth = 0;
+    nativeBalance = 0;
 }

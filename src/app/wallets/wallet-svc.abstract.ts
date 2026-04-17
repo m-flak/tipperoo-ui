@@ -36,7 +36,11 @@ export abstract class AbstractWalletService implements IWalletService {
 
     getChainId(): Observable<string> {
         if (!this.ethereum) {
-            return throwError(() => new Error('No ethereum provider'));
+            this.ethereum = (<any>window).ethereum;
+
+            if (!this.ethereum) {
+                return throwError(() => new Error('No ethereum provider'));
+            }
         }
 
         return from(this.ethereum.request({ method: 'eth_chainId' })).pipe(
@@ -47,7 +51,11 @@ export abstract class AbstractWalletService implements IWalletService {
 
     changeChain(chainId: string): Observable<string> {
         if (!this.ethereum) {
-            return throwError(() => new Error('No ethereum provider'));
+            this.ethereum = (<any>window).ethereum;
+
+            if (!this.ethereum) {
+                return throwError(() => new Error('No ethereum provider'));
+            }
         }
 
         const network = getNetwork(chainId);
@@ -83,7 +91,11 @@ export abstract class AbstractWalletService implements IWalletService {
 
     getBalance(address: string): Observable<number> {
         if (!this.ethereum) {
-            return throwError(() => new Error('No ethereum provider'));
+            this.ethereum = (<any>window).ethereum;
+
+            if (!this.ethereum) {
+                return throwError(() => new Error('No ethereum provider'));
+            }
         }
 
         return from(
@@ -100,7 +112,11 @@ export abstract class AbstractWalletService implements IWalletService {
 
     call(method: string, args: CallArg[], to: string, sender?: string): Observable<string> {
         if (!this.ethereum) {
-            return throwError(() => new Error('No ethereum provider'));
+            this.ethereum = (<any>window).ethereum;
+
+            if (!this.ethereum) {
+                return throwError(() => new Error('No ethereum provider'));
+            }
         }
 
         let data = fnAbi(method);
@@ -133,7 +149,11 @@ export abstract class AbstractWalletService implements IWalletService {
         value?: bigint,
     ): Observable<string> {
         if (!this.ethereum) {
-            return throwError(() => new Error('No ethereum provider'));
+            this.ethereum = (<any>window).ethereum;
+
+            if (!this.ethereum) {
+                return throwError(() => new Error('No ethereum provider'));
+            }
         }
 
         let data = fnAbi(method);
@@ -163,7 +183,11 @@ export abstract class AbstractWalletService implements IWalletService {
         txHash: string,
     ): Observable<Partial<{ transactionHash: string; status: string }> | null | undefined> {
         if (!this.ethereum) {
-            return throwError(() => new Error('No ethereum provider'));
+            this.ethereum = (<any>window).ethereum;
+
+            if (!this.ethereum) {
+                return throwError(() => new Error('No ethereum provider'));
+            }
         }
 
         return timer(2000).pipe(

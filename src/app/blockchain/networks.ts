@@ -19,7 +19,7 @@ export const getNetwork = (chainId: string) => {
 export const NETWORKS = {
     scroll: {
         chainId: '0x82750',
-        name: 'Scroll Sepolia',
+        name: 'Scroll',
         rpcUrls: ['https://rpc.scroll.io'],
         nativeCurrency: {
             name: 'Ethereum',

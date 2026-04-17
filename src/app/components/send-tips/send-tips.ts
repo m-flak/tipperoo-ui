@@ -6,11 +6,12 @@ import { firstValueFrom, map, mergeMap, switchMap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { ChangeConstants } from '../../store/changes.constants';
 import { SendCredits } from './send-credits/send-credits';
-import { SendEth } from './send-eth/send-eth';
+import { SendNative } from './send-native/send-native';
+import { getNetwork } from '../../blockchain/networks';
 
 @Component({
     selector: 'app-send-tips',
-    imports: [BuyCredits, AsyncPipe, SendCredits, SendEth],
+    imports: [BuyCredits, AsyncPipe, SendCredits, SendNative],
     templateUrl: './send-tips.html',
     styleUrl: './send-tips.scss',
 })
@@ -37,6 +38,9 @@ export class SendTips {
 
     nativeBalance$ = this._walletFacade.getBalances().pipe(map(({ native }) => native));
     nativeSending$ = this._walletFacade.getChangePending(ChangeConstants.SEND_NATIVE);
+    nativeTokenSymbol$ = this._walletFacade
+        .getChainId()
+        .pipe(map((chainId) => getNetwork(chainId).nativeCurrency.symbol));
 
     async buyCredits(amount: number) {
         const chainId = await firstValueFrom(this._walletFacade.getChainId());

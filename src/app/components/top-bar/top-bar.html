@@ -8,7 +8,7 @@
     @let accountId = accountId$ | async;
     @let balances = balances$ | async;
     @let connected = connected$ | async;
-    @let chainId = chainId$ | async;
+    @let activeNetwork = activeNetwork$ | async;
 
     @if (connected === true) {
         <app-asset-summary
@@ -16,17 +16,15 @@
             [accountId]="accountId ?? 0"
             [credits]="(balances ?? { credits: 0, native: 0 }).credits"
             [nativeBalance]="(balances ?? { credits: 0, native: 0 }).native"
+            [nativeTokenSymbol]="activeNetwork?.nativeCurrency?.symbol ?? 'ETH'"
+            [nativeTokenIcon]="activeNetwork?.nativeTokenIcon ?? null"
         >
         </app-asset-summary>
 
-        @if (chainId === chainIds.SCROLL) {
-            <a href="https://portal.scroll.io/bridge">Bridge ETH to Scroll</a>
-        } @else if (chainId === chainIds.SCROLL_SEPOLIA) {
-            <a href="https://portal-sepolia.scroll.io/bridge">Bridge ETH to Scroll</a>
-        } @else if (chainId === chainIds.BASE_SEPOLIA) {
-            <a href="https://superbridge.app/base-sepolia">Bridge ETH to Base</a>
-        } @else if (chainId === chainIds.BASE) {
-            <a href="https://www.brid.gg/base?originChainId=1&token=ETH">Bridge ETH to Base</a>
+        @if (activeNetwork?.bridgeUrl) {
+            <a [href]="activeNetwork!.bridgeUrl">
+                Bridge {{ activeNetwork!.nativeCurrency.symbol }} to {{ activeNetwork!.name }}
+            </a>
         }
     }
 

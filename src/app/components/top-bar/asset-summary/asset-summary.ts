@@ -18,4 +18,10 @@ export class AssetSummary {
 
     @Input()
     nativeBalance = 0;
+
+    @Input()
+    nativeTokenSymbol = 'ETH';
+
+    @Input()
+    nativeTokenIcon: string | null = null;
 }

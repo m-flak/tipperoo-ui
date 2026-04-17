@@ -2,12 +2,12 @@ import { Component, EventEmitter, Input, Output, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-    selector: 'app-send-eth',
+    selector: 'app-send-native',
     imports: [FormsModule],
-    templateUrl: './send-eth.html',
-    styleUrl: './send-eth.scss',
+    templateUrl: './send-native.html',
+    styleUrl: './send-native.scss',
 })
-export class SendEth {
+export class SendNative {
     private _amount = 0;
 
     @Input()
@@ -15,6 +15,9 @@ export class SendEth {
 
     @Input()
     disable = false;
+
+    @Input()
+    nativeTokenSymbol = 'ETH';
 
     @Output()
     send = new EventEmitter<{ amount: number; to: number }>();

@@ -1,6 +1,6 @@
 <div>
     <div>
-        <span>Send Ethereum:</span>
+        <span>Send {{ nativeTokenSymbol }}:</span>
         <div>
             <input
                 #amountInput
@@ -8,7 +8,7 @@
                 [max]="totalBalance"
                 min="0"
                 [disabled]="disable"
-                id="SendEth_Amount"
+                id="SendNative_Amount"
                 [(ngModel)]="amount"
                 [value]="0"
             />
@@ -23,7 +23,7 @@
             type="number"
             min="1"
             [disabled]="disable"
-            id="SendEth_ToAccount"
+            id="SendNative_ToAccount"
             [(ngModel)]="toAccount"
             [value]=""
         />

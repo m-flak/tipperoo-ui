@@ -28,6 +28,7 @@ export const NETWORKS = {
         },
         blockExplorerUrls: ['https://scrollscan.com/'],
         bridgeUrl: 'https://portal.scroll.io/bridge',
+        nativeTokenIcon: '/icons/ethereum-asset.svg',
         contracts: {
             nft: import.meta.env.NG_APP_NFT_CONTRACT,
             creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT,
@@ -46,6 +47,7 @@ export const NETWORKS = {
         },
         blockExplorerUrls: ['https://sepolia.scrollscan.com/'],
         bridgeUrl: 'https://portal-sepolia.scroll.io/bridge',
+        nativeTokenIcon: '/icons/ethereum-asset.svg',
         contracts: {
             nft: import.meta.env.NG_APP_NFT_CONTRACT_TESTNET,
             creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_TESTNET,
@@ -64,6 +66,7 @@ export const NETWORKS = {
         },
         blockExplorerUrls: ['https://sepolia.basescan.org/'],
         bridgeUrl: 'https://superbridge.app/base-sepolia',
+        nativeTokenIcon: '/icons/ethereum-asset.svg',
         contracts: {
             nft: import.meta.env.NG_APP_NFT_CONTRACT_BASE_TESTNET,
             creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_BASE_TESTNET,
@@ -82,6 +85,7 @@ export const NETWORKS = {
         },
         blockExplorerUrls: ['https://basescan.org/'],
         bridgeUrl: 'https://bridge.base.org',
+        nativeTokenIcon: '/icons/ethereum-asset.svg',
         contracts: {
             nft: import.meta.env.NG_APP_NFT_CONTRACT_BASE,
             creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_BASE,
@@ -100,6 +104,7 @@ export const NETWORKS = {
         },
         blockExplorerUrls: ['https://testnet.monadexplorer.com/'],
         bridgeUrl: null,
+        nativeTokenIcon: null,
         contracts: {
             nft: import.meta.env.NG_APP_NFT_CONTRACT_MONAD_TESTNET,
             creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_MONAD_TESTNET,

@@ -28,7 +28,7 @@ export abstract class AbstractWalletService implements IWalletService {
         return this.isConnected;
     }
 
-    abstract getActiveAccount(): string;
+    abstract getActiveAccount(prefix?: boolean): string;
 
     abstract connectWallet(): Observable<string[]>;
 

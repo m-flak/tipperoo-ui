@@ -10,7 +10,7 @@ export class GenericWalletService extends AbstractWalletService {
         super((<any>window).ethereum);
     }
 
-    override getActiveAccount(): string {
+    override getActiveAccount(prefix?: boolean): string {
         if (!this.ethereum) {
             this.ethereum = (<any>window).ethereum;
 
@@ -21,6 +21,10 @@ export class GenericWalletService extends AbstractWalletService {
 
         const addr =
             (<any>this.ethereum)?.selectedAddress || (<any>this.ethereum)?.getSelectedAddress();
+
+        if (prefix === false && addr) {
+            return addr.replace('0x', '');
+        }
 
         return addr || '';
     }

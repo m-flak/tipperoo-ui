@@ -9,7 +9,7 @@ export interface CallArg {
 export interface IWalletService {
     readonly connected: boolean;
 
-    getActiveAccount(): string;
+    getActiveAccount(prefix?: boolean): string;
 
     connectWallet(): Observable<string[]>;
 

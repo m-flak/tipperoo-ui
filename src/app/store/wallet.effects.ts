@@ -76,7 +76,7 @@ export const uponChangeChainSuccessSetBalances = createEffect(
             switchMap(([{ chainId }, wallet]) => {
                 const provider = walletSvc.getWalletProvider(wallet);
                 return creditsMgr
-                    .balanceOf(provider.getActiveAccount(), chainId)
+                    .balanceOf(provider, provider.getActiveAccount(), chainId)
                     .pipe(
                         switchMap((credits) =>
                             provider
@@ -102,12 +102,12 @@ export const uponChangeChainSuccessUpdateNftData = createEffect(
             concatLatestFrom(() => store.select(walletFeature.selectWallet)),
             switchMap(([{ chainId }, wallet]) => {
                 const provider = walletSvc.getWalletProvider(wallet);
-                return nft.balanceOf(provider.getActiveAccount(), chainId).pipe(
+                return nft.balanceOf(provider,provider.getActiveAccount(), chainId).pipe(
                     switchMap((balance) => {
                         if (balance < 1) {
                             return of(0); // 0 means no account nft
                         }
-                        return nft.getAccountTokenId(provider.getActiveAccount(), chainId);
+                        return nft.getAccountTokenId(provider, provider.getActiveAccount(), chainId);
                     }),
                 );
             }),

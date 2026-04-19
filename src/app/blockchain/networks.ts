@@ -10,6 +10,8 @@ export const getNetwork = (chainId: string) => {
             return NETWORKS.scroll;
         case NetworkConstants.MONAD_TESTNET:
             return NETWORKS.monadTestnet;
+        case NetworkConstants.MONAD:
+            return NETWORKS.monad;
         case NetworkConstants.SCROLL_SEPOLIA:
         default:
             return NETWORKS.scrollSepolia;
@@ -92,6 +94,25 @@ export const NETWORKS = {
             tipper: import.meta.env.NG_APP_TIPPER_CONTRACT_BASE,
         },
         alchemyBaseUrl: 'https://base-mainnet.g.alchemy.com/v2/',
+    },
+    monad: {
+        chainId: '0x8F',
+        name: 'Monad',
+        rpcUrls: ['https://rpc.monad.xyz'],
+        nativeCurrency: {
+            name: 'Monad',
+            symbol: 'MON',
+            decimals: 18,
+        },
+        blockExplorerUrls: ['https://monadscan.com/'],
+        bridgeUrl: null,
+        nativeTokenIcon: '/icons/monad.svg',
+        contracts: {
+            nft: import.meta.env.NG_APP_NFT_CONTRACT_MONAD,
+            creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_MONAD,
+            tipper: import.meta.env.NG_APP_TIPPER_CONTRACT_MONAD,
+        },
+        alchemyBaseUrl: 'https://monad-mainnet.g.alchemy.com/v2/',
     },
     monadTestnet: {
         chainId: '0x279f',

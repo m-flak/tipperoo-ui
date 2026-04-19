@@ -4,4 +4,5 @@ export enum NetworkConstants {
     BASE_SEPOLIA = '0x14A34',
     BASE = '0x2105',
     MONAD_TESTNET = '0x279f',
+    MONAD = '0x8F',
 }

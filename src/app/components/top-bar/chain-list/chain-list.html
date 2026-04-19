@@ -32,6 +32,14 @@
                 alt="Base Sepolia"
                 title="Base Sepolia"
             />
+        } @else if (chainId === chainIds.MONAD) {
+            <img
+                src="/icons/monad.svg"
+                width="24"
+                height="24"
+                alt="Monad"
+                title="Monad"
+            />
         } @else if (chainId === chainIds.MONAD_TESTNET) {
             <img
                 src="/icons/monad.svg"
@@ -84,6 +92,22 @@
                 title="Scroll Mainnet"
             />
             Scroll
+        </button>
+        <button
+            #monad
+            ngbDropdownItem
+            [attr.data-chain-id]="chainIds.MONAD"
+            [disabled]="monad.dataset['chainId'] === chainId"
+            (click)="clickChain(chainIds.MONAD)"
+        >
+            <img
+                src="/icons/monad.svg"
+                width="24"
+                height="24"
+                alt="Monad"
+                title="Monad"
+            />
+            Monad
         </button>
         <span class="menu-group">Test Networks</span>
         <button

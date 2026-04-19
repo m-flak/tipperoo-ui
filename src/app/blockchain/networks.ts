@@ -104,7 +104,7 @@ export const NETWORKS = {
         },
         blockExplorerUrls: ['https://testnet.monadexplorer.com/'],
         bridgeUrl: null,
-        nativeTokenIcon: null,
+        nativeTokenIcon: 'icons/monad.svg',
         contracts: {
             nft: import.meta.env.NG_APP_NFT_CONTRACT_MONAD_TESTNET,
             creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_MONAD_TESTNET,

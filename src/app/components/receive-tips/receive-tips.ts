@@ -3,6 +3,7 @@ import { WalletFacade } from '../../store/wallet.facade';
 import { map } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { ChangeConstants } from '../../store/changes.constants';
+import { getNetwork } from '../../blockchain/networks';
 
 @Component({
     selector: 'app-receive-tips',
@@ -18,6 +19,9 @@ export class ReceiveTips {
     myBalance$ = this._facade.getBalances().pipe(map(({ credits }) => credits));
     accountId$ = this._facade.getNftAccountId();
     creditsRedeeming$ = this._facade.getChangePending(ChangeConstants.REDEEM_CREDITS);
+    nativeTokenName$ = this._facade
+        .getChainId()
+        .pipe(map((chainId) => getNetwork(chainId).nativeCurrency.name));
 
     async createAccount() {
         await this._facade.createAccount();

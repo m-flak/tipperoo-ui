@@ -15,7 +15,7 @@ export const selectNftAccountId = createSelector(selectWallet, (state) => state.
 
 export const selectBalances = createSelector(selectWallet, (state) => ({
     credits: state.balanceCredits,
-    eth: state.balanceEth,
+    native: state.balanceNative,
 }));
 
 export const selectChangeIsPending = (change: string) =>

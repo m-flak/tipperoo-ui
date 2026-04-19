@@ -15,7 +15,7 @@ export interface WalletState {
     nftId: number;
 
     balanceCredits: number;
-    balanceEth: number;
+    balanceNative: number;
 }
 
 export const walletState: WalletState = {
@@ -31,7 +31,7 @@ export const walletState: WalletState = {
     nftId: 0,
 
     balanceCredits: 0,
-    balanceEth: 0,
+    balanceNative: 0,
 };
 
 export const walletReducer = createReducer(
@@ -63,7 +63,7 @@ export const walletReducer = createReducer(
         accounts: [],
         nftId: 0,
         balanceCredits: 0,
-        balanceEth: 0,
+        balanceNative: 0,
         wallet: '',
     })),
     on(WalletActions.changeChain, WalletActions.changeChainSuccess, (state, { chainId }) => ({
@@ -74,10 +74,10 @@ export const walletReducer = createReducer(
         ...state,
         nftId,
     })),
-    on(WalletActions.setBalances, (state, { credits, eth }) => ({
+    on(WalletActions.setBalances, (state, { credits, native }) => ({
         ...state,
         balanceCredits: credits,
-        balanceEth: eth,
+        balanceNative: native,
     })),
     on(WalletActions.changesPending, (state, { what }) => ({
         ...state,

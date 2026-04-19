@@ -1,8 +1,9 @@
 <div class="send-tips">
     @let creditsBalance = creditsBalance$ | async;
     @let creditsSending = creditsSending$ | async;
-    @let ethBalance = ethBalance$ | async;
-    @let ethSending = ethSending$ | async;
+    @let nativeBalance = nativeBalance$ | async;
+    @let nativeSending = nativeSending$ | async;
+    @let nativeTokenSymbol = nativeTokenSymbol$ | async;
 
     <div class="tip-picker">
         <span>Choose the type of tip you wish to send:</span>
@@ -17,14 +18,14 @@
         />
         <label for="SendCurrency_Credits">Credits</label>
         <input
-            #ethereumRadio
+            #nativeRadio
             type="radio"
-            id="SendCurrency_Ethereum"
+            id="SendCurrency_Native"
             name="sendCurrency"
-            value="ethereum"
-            (click)="pickTips(ethereumRadio.value)"
+            value="native"
+            (click)="pickTips(nativeRadio.value)"
         />
-        <label for="SendCurrency_Ethereum">Ethereum</label>
+        <label for="SendCurrency_Native">{{ nativeTokenSymbol }}</label>
     </div>
 
     @if (pickedTips === 'credits') {
@@ -33,12 +34,13 @@
             [disable]="creditsSending ?? false"
             (send)="sendCredits($event)"
         ></app-send-credits>
-    } @else if (pickedTips === 'ethereum') {
-        <app-send-eth
-            [totalBalance]="ethBalance ?? 0"
-            [disable]="ethSending ?? false"
-            (send)="sendEthereum($event)"
-        ></app-send-eth>
+    } @else if (pickedTips === 'native') {
+        <app-send-native
+            [totalBalance]="nativeBalance ?? 0"
+            [disable]="nativeSending ?? false"
+            [nativeTokenSymbol]="nativeTokenSymbol ?? 'ETH'"
+            (send)="sendNative($event)"
+        ></app-send-native>
     }
 
     <p>

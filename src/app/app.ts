@@ -1,4 +1,5 @@
 import { Component, inject, NgZone, OnDestroy, OnInit, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { RouterOutlet } from '@angular/router';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { TopBar } from './components/top-bar/top-bar';
@@ -34,7 +35,9 @@ export class App implements OnInit, OnDestroy {
         });
 
         this._facade.disconnectWallet(); //force popup
-        this._facadePrice.getPrices();
+        firstValueFrom(this._facade.getChainId()).then((chainId) =>
+            this._facadePrice.getPrices(chainId),
+        );
     }
 
     ngOnDestroy(): void {

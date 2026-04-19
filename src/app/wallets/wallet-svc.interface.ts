@@ -19,7 +19,7 @@ export interface IWalletService {
 
     changeChain(chainId: string): Observable<string>;
 
-    getBalance(address: string): Observable<number>;
+    getBalance(address: string, chainId: string): Observable<number>;
 
     call(method: string, args: CallArg[], to: string, sender?: string): Observable<string>;
 

@@ -1,5 +1,6 @@
 <div class="receive-tips">
     @let hasAccount = hasAccount$ | async;
+    @let nativeTokenName = nativeTokenName$ | async;
     @let accountCreating = accountCreating$ | async;
     @let myBalance = myBalance$ | async;
     @let accountId = accountId$ | async;
@@ -25,7 +26,7 @@
             <p>Your Account ID:</p>
             <span class="account-id">{{ accountId }}</span>
             <p>
-                Simply provide your Account ID, and anyone send you credits, tokens, or Ethereum
+                Simply provide your Account ID, and anyone send you credits, tokens, or {{ nativeTokenName }}
                 with Tipperoo!
             </p>
             @if (myBalance === 0) {

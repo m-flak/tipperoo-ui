@@ -8,6 +8,10 @@ export const getNetwork = (chainId: string) => {
             return NETWORKS.baseSepolia;
         case NetworkConstants.SCROLL:
             return NETWORKS.scroll;
+        case NetworkConstants.MONAD_TESTNET:
+            return NETWORKS.monadTestnet;
+        case NetworkConstants.MONAD:
+            return NETWORKS.monad;
         case NetworkConstants.SCROLL_SEPOLIA:
         default:
             return NETWORKS.scrollSepolia;
@@ -17,7 +21,7 @@ export const getNetwork = (chainId: string) => {
 export const NETWORKS = {
     scroll: {
         chainId: '0x82750',
-        name: 'Scroll Sepolia',
+        name: 'Scroll',
         rpcUrls: ['https://rpc.scroll.io'],
         nativeCurrency: {
             name: 'Ethereum',
@@ -25,6 +29,8 @@ export const NETWORKS = {
             decimals: 18,
         },
         blockExplorerUrls: ['https://scrollscan.com/'],
+        bridgeUrl: 'https://portal.scroll.io/bridge',
+        nativeTokenIcon: '/icons/ethereum-asset.svg',
         contracts: {
             nft: import.meta.env.NG_APP_NFT_CONTRACT,
             creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT,
@@ -42,6 +48,8 @@ export const NETWORKS = {
             decimals: 18,
         },
         blockExplorerUrls: ['https://sepolia.scrollscan.com/'],
+        bridgeUrl: 'https://portal-sepolia.scroll.io/bridge',
+        nativeTokenIcon: '/icons/ethereum-asset.svg',
         contracts: {
             nft: import.meta.env.NG_APP_NFT_CONTRACT_TESTNET,
             creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_TESTNET,
@@ -59,6 +67,8 @@ export const NETWORKS = {
             decimals: 18,
         },
         blockExplorerUrls: ['https://sepolia.basescan.org/'],
+        bridgeUrl: 'https://superbridge.app/base-sepolia',
+        nativeTokenIcon: '/icons/ethereum-asset.svg',
         contracts: {
             nft: import.meta.env.NG_APP_NFT_CONTRACT_BASE_TESTNET,
             creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_BASE_TESTNET,
@@ -76,11 +86,51 @@ export const NETWORKS = {
             decimals: 18,
         },
         blockExplorerUrls: ['https://basescan.org/'],
+        bridgeUrl: 'https://bridge.base.org',
+        nativeTokenIcon: '/icons/ethereum-asset.svg',
         contracts: {
             nft: import.meta.env.NG_APP_NFT_CONTRACT_BASE,
             creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_BASE,
             tipper: import.meta.env.NG_APP_TIPPER_CONTRACT_BASE,
         },
         alchemyBaseUrl: 'https://base-mainnet.g.alchemy.com/v2/',
+    },
+    monad: {
+        chainId: '0x8F',
+        name: 'Monad',
+        rpcUrls: ['https://rpc.monad.xyz'],
+        nativeCurrency: {
+            name: 'Monad',
+            symbol: 'MON',
+            decimals: 18,
+        },
+        blockExplorerUrls: ['https://monadscan.com/'],
+        bridgeUrl: null,
+        nativeTokenIcon: '/icons/monad.svg',
+        contracts: {
+            nft: import.meta.env.NG_APP_NFT_CONTRACT_MONAD,
+            creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_MONAD,
+            tipper: import.meta.env.NG_APP_TIPPER_CONTRACT_MONAD,
+        },
+        alchemyBaseUrl: 'https://monad-mainnet.g.alchemy.com/v2/',
+    },
+    monadTestnet: {
+        chainId: '0x279f',
+        name: 'Monad Testnet',
+        rpcUrls: ['https://testnet-rpc.monad.xyz'],
+        nativeCurrency: {
+            name: 'Monad',
+            symbol: 'MON',
+            decimals: 18,
+        },
+        blockExplorerUrls: ['https://testnet.monadexplorer.com/'],
+        bridgeUrl: null,
+        nativeTokenIcon: 'icons/monad.svg',
+        contracts: {
+            nft: import.meta.env.NG_APP_NFT_CONTRACT_MONAD_TESTNET,
+            creditsMgr: import.meta.env.NG_APP_CMGR_CONTRACT_MONAD_TESTNET,
+            tipper: import.meta.env.NG_APP_TIPPER_CONTRACT_MONAD_TESTNET,
+        },
+        alchemyBaseUrl: 'https://monad-testnet.g.alchemy.com/v2/',
     },
 };

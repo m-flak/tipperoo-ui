@@ -125,6 +125,8 @@ export class WalletFacade {
     async buyCredits(amount: number) {
         const wallet = await this._getActiveWallet();
         const chainId = await firstValueFrom(this.getChainId());
+        const { decimals } = getNetwork(chainId).nativeCurrency;
+        const factor = 10n ** BigInt(decimals);
 
         const txHash = await firstValueFrom(
             wallet.transact(
@@ -132,7 +134,8 @@ export class WalletFacade {
                 [],
                 getNetwork(chainId).contracts.creditsMgr,
                 wallet.getActiveAccount(),
-                BigInt(Math.floor(amount * 1e18)),
+                BigInt(Math.floor(amount)) * factor +
+                    BigInt(Math.round((amount % 1) * Number(factor))),
             ),
         );
 
@@ -184,9 +187,11 @@ export class WalletFacade {
     }
 
     // todo: move contract interaction to svc
-    async sendEthereum(amount: number, to: number) {
+    async sendNative(amount: number, to: number) {
         const wallet = await this._getActiveWallet();
         const chainId = await firstValueFrom(this.getChainId());
+        const { decimals } = getNetwork(chainId).nativeCurrency;
+        const factor = 10n ** BigInt(decimals);
 
         const txHash = await firstValueFrom(
             wallet.transact(
@@ -198,11 +203,12 @@ export class WalletFacade {
                 ],
                 getNetwork(chainId).contracts.tipper,
                 wallet.getActiveAccount(),
-                BigInt(Math.floor(amount * 1e18)),
+                BigInt(Math.floor(amount)) * factor +
+                    BigInt(Math.round((amount % 1) * Number(factor))),
             ),
         );
 
-        this._store.dispatch(WalletActions.changesPending({ what: ChangeConstants.SEND_ETHEREUM }));
+        this._store.dispatch(WalletActions.changesPending({ what: ChangeConstants.SEND_NATIVE }));
 
         let sub = wallet.receipt(txHash).subscribe((result) => {
             if (result !== undefined && result !== null) {
@@ -225,10 +231,11 @@ export class WalletFacade {
         const chainId = await firstValueFrom(this.getChainId());
         const activeAcct = wallet.getActiveAccount();
 
-        const eth = await firstValueFrom(wallet.getBalance(activeAcct));
-        const credits = await firstValueFrom(this._creditsMgr.balanceOf(wallet, activeAcct, chainId));
+        const native = await firstValueFrom(wallet.getBalance(activeAcct, chainId));
 
-        this._store.dispatch(WalletActions.setBalances({ credits, eth }));
+        const credits = await firstValueFrom(this._creditsMgr.balanceOf(wallet,activeAcct, chainId));
+
+        this._store.dispatch(WalletActions.setBalances({ credits, native }));
     }
 
     private async _updateNftData() {

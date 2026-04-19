@@ -80,12 +80,12 @@ export const uponChangeChainSuccessSetBalances = createEffect(
                     .pipe(
                         switchMap((credits) =>
                             provider
-                                .getBalance(provider.getActiveAccount())
-                                .pipe(map((eth) => ({ credits, eth }))),
+                                .getBalance(provider.getActiveAccount(), chainId)
+                                .pipe(map((native) => ({ credits, native }))),
                         ),
                     );
             }),
-            map((creditsEth) => WalletActions.setBalances(creditsEth)),
+            map((creditsNative) => WalletActions.setBalances(creditsNative)),
         ),
     { functional: true, dispatch: true },
 );

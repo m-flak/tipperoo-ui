@@ -32,7 +32,24 @@
                 alt="Base Sepolia"
                 title="Base Sepolia"
             />
-        } @else {
+        } @else if (chainId === chainIds.MONAD) {
+            <img
+                src="/icons/monad.svg"
+                width="24"
+                height="24"
+                alt="Monad"
+                title="Monad"
+            />
+        } @else if (chainId === chainIds.MONAD_TESTNET) {
+            <img
+                src="/icons/monad.svg"
+                width="24"
+                height="24"
+                alt="Monad Testnet"
+                title="Monad Testnet"
+            />
+        }
+        @else {
             <img
                 src="/icons/unsupported.svg"
                 width="24"
@@ -76,6 +93,22 @@
             />
             Scroll
         </button>
+        <button
+            #monad
+            ngbDropdownItem
+            [attr.data-chain-id]="chainIds.MONAD"
+            [disabled]="monad.dataset['chainId'] === chainId"
+            (click)="clickChain(chainIds.MONAD)"
+        >
+            <img
+                src="/icons/monad.svg"
+                width="24"
+                height="24"
+                alt="Monad"
+                title="Monad"
+            />
+            Monad
+        </button>
         <span class="menu-group">Test Networks</span>
         <button
             #baseSepolia
@@ -108,6 +141,22 @@
                 title="Scroll Sepolia"
             />
             Scroll Sepolia
+        </button>
+        <button
+            #monadTestnet
+            ngbDropdownItem
+            [attr.data-chain-id]="chainIds.MONAD_TESTNET"
+            [disabled]="monadTestnet.dataset['chainId'] === chainId"
+            (click)="clickChain(chainIds.MONAD_TESTNET)"
+        >
+            <img
+                src="/icons/monad.svg"
+                width="24"
+                height="24"
+                alt="Monad Testnet"
+                title="Monad Testnet"
+            />
+            Monad Testnet
         </button>
     </div>
 </div>
